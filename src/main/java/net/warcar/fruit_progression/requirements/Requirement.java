@@ -1,11 +1,9 @@
 package net.warcar.fruit_progression.requirements;
 
+import com.google.gson.JsonObject;
 import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import net.warcar.fruit_progression.init.ModRegistry;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
-
-import java.util.Arrays;
 
 public abstract class Requirement extends ForgeRegistryEntry<Requirement> {
     private final Class<?>[] requiredVals;
@@ -16,6 +14,8 @@ public abstract class Requirement extends ForgeRegistryEntry<Requirement> {
     }
 
     public abstract boolean requirementMet(LivingEntity entity, AbilityCore<?> core, RequirementInstance instance);
+
+    public abstract RequirementInstance deserializeInstance(JsonObject json);
 
     public Class<?>[] getRequiredVals() {
         return requiredVals;

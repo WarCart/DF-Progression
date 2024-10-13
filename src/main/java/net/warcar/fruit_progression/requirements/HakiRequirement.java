@@ -1,5 +1,6 @@
 package net.warcar.fruit_progression.requirements;
 
+import com.google.gson.JsonObject;
 import net.minecraft.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
@@ -34,5 +35,15 @@ public class HakiRequirement extends Requirement {
         }
         if (instance.isDebug()) DevilFruitProgressionMod.LOGGER.info(type + ":" + haki + "/" + target);
         return haki >= target;
+    }
+
+    public RequirementInstance deserializeInstance(JsonObject json) {
+        RequirementInstance instance = new RequirementInstance(this);
+        String[] args = {json.get("hakiXP").getAsString(), json.get("hakiType").getAsString()};
+        if (json.has("percentage")) {
+            args = new String[]{json.get("hakiXP").getAsString(), json.get("hakiType").getAsString(), Boolean.toString(json.get("percentage").getAsBoolean())};
+        }
+        instance.setValues(args);
+        return instance;
     }
 }

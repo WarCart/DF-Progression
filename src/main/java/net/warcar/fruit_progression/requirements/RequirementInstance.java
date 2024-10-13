@@ -22,7 +22,7 @@ public class RequirementInstance {
         return core;
     }
 
-    public void setValues(String[] args) {
+    public void setValues(String... args) {
         this.args = args;
     }
 

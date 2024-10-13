@@ -1,15 +1,15 @@
 package net.warcar.fruit_progression.requirements;
 
+import com.google.gson.JsonObject;
 import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.fml.ModList;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
-import net.warcar.fruit_progression.integrations.non_fruit_rework.ApplyOtherClasses;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
 
 public class FactionRequirement extends Requirement {
     public FactionRequirement() {
-        super(getRequirements());
+        super(String.class);
     }
 
     public boolean requirementMet(LivingEntity entity, AbilityCore<?> core, RequirementInstance instance) {
@@ -19,11 +19,9 @@ public class FactionRequirement extends Requirement {
         return EntityStatsCapability.get(entity).getFaction().equalsIgnoreCase(instance.getValues()[0]);
     }
 
-    private static Class<?>[] getRequirements() {
-        Class<?>[] out = new Class[]{String.class};
-        if (ModList.get().isLoaded("non_fruit_rework")) {
-            ApplyOtherClasses.faction(out);
-        }
-        return out;
+    public RequirementInstance deserializeInstance(JsonObject json) {
+        RequirementInstance instance = new RequirementInstance(this);
+        instance.setValues(json.get("faction").getAsString());
+        return instance;
     }
 }

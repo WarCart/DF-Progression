@@ -1,5 +1,6 @@
 package net.warcar.fruit_progression.requirements;
 
+import com.google.gson.JsonObject;
 import net.minecraft.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
@@ -26,5 +27,15 @@ public class DorikiRequirement extends Requirement {
         }
         if (instance.isDebug()) DevilFruitProgressionMod.LOGGER.info(EntityStatsCapability.get(entity).getDoriki() + "/" + targetDoriki);
         return EntityStatsCapability.get(entity).getDoriki() >= targetDoriki;
+    }
+
+    public RequirementInstance deserializeInstance(JsonObject json) {
+        RequirementInstance instance = new RequirementInstance(this);
+        String[] args = {json.get("doriki").getAsString()};
+        if (json.has("percentage")) {
+            args = new String[]{json.get("doriki").getAsString(), Boolean.toString(json.get("percentage").getAsBoolean())};
+        }
+        instance.setValues(args);
+        return instance;
     }
 }

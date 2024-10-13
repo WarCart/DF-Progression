@@ -1,5 +1,6 @@
 package net.warcar.fruit_progression.requirements;
 
+import com.google.gson.JsonObject;
 import net.minecraft.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
@@ -11,5 +12,9 @@ public class AwakeningRequirement extends Requirement {
             DevilFruitProgressionMod.LOGGER.info(DevilFruitCapability.get(entity).hasAwakenedFruit());
         }
         return DevilFruitCapability.get(entity).hasAwakenedFruit();
+    }
+
+    public RequirementInstance deserializeInstance(JsonObject json) {
+        return new RequirementInstance(this);
     }
 }

@@ -1,5 +1,6 @@
 package net.warcar.fruit_progression.requirements;
 
+import com.google.gson.JsonObject;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
@@ -12,5 +13,9 @@ public class HaoshokuBornRequirement extends Requirement {
             return HakiHelper.isHaoshokuBorn((PlayerEntity) entity) || CommonConfig.INSTANCE.getHaoshokuUnlockLogic() == CommonConfig.HaoshokuUnlockLogic.EXPERIENCE;
         }
         return false;
+    }
+
+    public RequirementInstance deserializeInstance(JsonObject json) {
+        return new RequirementInstance(this);
     }
 }

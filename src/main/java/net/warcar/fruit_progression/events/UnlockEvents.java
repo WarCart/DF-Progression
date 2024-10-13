@@ -13,6 +13,7 @@ import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import net.warcar.fruit_progression.data.entity.abilities_addition.AbilityAdditionDataCapability;
 import net.warcar.fruit_progression.data.entity.abilities_addition.AbilityAdditionDataProvider;
 import net.warcar.fruit_progression.init.ModConfig;
+import net.warcar.fruit_progression.new_data_reader.AbilityDataReader;
 import net.warcar.fruit_progression.requirements.Requirement;
 import net.warcar.fruit_progression.requirements.RequirementInstance;
 import net.warcar.fruit_progression.requirements.RequirementSetInstance;
@@ -33,10 +34,10 @@ public class UnlockEvents {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onUnlock(UnlockAbilityEvent event) {
         ResourceLocation location = event.getAbilityCore().getRegistryName();
-        if (location != null && ModConfig.INSTANCE.getAbilities().containsKey(location.toString())) {
-            RequirementSetInstance instance = ModConfig.INSTANCE.getAbilities().get(location.toString());
+        if (location != null && AbilityDataReader.map.containsKey(location)) {
+            RequirementSetInstance instance = AbilityDataReader.map.get(location);
             if (instance != null) {
-                if (isFulfilled(ModConfig.INSTANCE.getAbilities().get(location.toString()), event.getEntityLiving(), event.getAbilityCore())) {
+                if (AbilityDataReader.map.get(location).isFulfilled(event.getEntityLiving(), event.getAbilityCore())) {
                     event.setResult(Event.Result.ALLOW);
                 } else {
                     event.setResult(Event.Result.DENY);
@@ -97,7 +98,7 @@ public class UnlockEvents {
         props.getDevilFruit().ifPresent(fruit -> {
             RequirementSetInstance instance = ModConfig.INSTANCE.getAwakenings().get(fruit.toString());
             if (instance != null) {
-                props.setAwakenedFruit(isFulfilled(instance, player, null));
+                props.setAwakenedFruit(instance.isFulfilled(player, null));
             }
         });
     }

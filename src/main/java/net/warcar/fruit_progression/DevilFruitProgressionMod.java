@@ -1,10 +1,8 @@
 package net.warcar.fruit_progression;
 
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig.Type;
@@ -14,13 +12,12 @@ import net.warcar.fruit_progression.data.entity.abilities_addition.AbilityAdditi
 import net.warcar.fruit_progression.init.ModConfig;
 import net.warcar.fruit_progression.init.ModRegistry;
 import net.warcar.fruit_progression.init.ModRequirements;
-import net.warcar.fruit_progression.integrations.clothconfig.ModConfigsIntegration;
+import net.warcar.fruit_progression.new_data_reader.AbilityDataReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Mod(DevilFruitProgressionMod.MOD_ID)
-public class DevilFruitProgressionMod
-{
+public class DevilFruitProgressionMod {
     public static final String MOD_ID = "ability_progression";
     public static final Logger LOGGER = LogManager.getLogger();
 
@@ -30,10 +27,14 @@ public class DevilFruitProgressionMod
         bus.addListener(this::setup);
         ModRequirements.register();
         ModLoadingContext.get().registerConfig(Type.COMMON, ModConfig.SPEC);
-        //if (ModList.get().isLoaded("cloth-config")) DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ModConfigsIntegration::registerConfigBuilder);
         MinecraftForge.EVENT_BUS.register(this);
     }
+
     private void setup(final FMLCommonSetupEvent event) {
         AbilityAdditionDataCapability.register();
+    }
+
+    private void addReloadListeners(final AddReloadListenerEvent event) {
+        event.addListener(new AbilityDataReader());
     }
 }

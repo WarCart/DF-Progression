@@ -1,5 +1,6 @@
 package net.warcar.fruit_progression.requirements;
 
+import com.google.gson.JsonObject;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -18,5 +19,11 @@ public class QuestRequirement extends Requirement {
             return QuestDataCapability.get((PlayerEntity) entity).hasFinishedQuest((QuestId) GameRegistry.findRegistry(QuestId.class).getValue(new ResourceLocation(instance.getValues()[0])));
         }
         return false;
+    }
+
+    public RequirementInstance deserializeInstance(JsonObject json) {
+        RequirementInstance instance = new RequirementInstance(this);
+        instance.setValues(json.get("questID").getAsString());
+        return instance;
     }
 }

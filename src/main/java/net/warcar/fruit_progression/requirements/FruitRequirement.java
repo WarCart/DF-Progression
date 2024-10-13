@@ -1,5 +1,6 @@
 package net.warcar.fruit_progression.requirements;
 
+import com.google.gson.JsonObject;
 import net.minecraft.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
@@ -22,5 +23,11 @@ public class FruitRequirement extends Requirement {
             return fruit.hasYamiPower() || sameFruit;
         }
         return sameFruit;
+    }
+
+    public RequirementInstance deserializeInstance(JsonObject json) {
+        RequirementInstance instance = new RequirementInstance(this);
+        instance.setValues(json.get("fruitID").getAsString());
+        return instance;
     }
 }
