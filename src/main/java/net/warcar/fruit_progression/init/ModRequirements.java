@@ -1,6 +1,7 @@
 package net.warcar.fruit_progression.init;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.RegistryObject;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import net.warcar.fruit_progression.requirements.*;
@@ -30,5 +31,8 @@ public class ModRequirements {
         registerRequirement(new DefaultReqirement(), "default");
         registerRequirement(new LoyaltyRequirement(), "loyalty");
         registerRequirement(new UsedAbilityRequirement(), "ability_used");
+        if (ModList.get().isLoaded("dcintegration")) {
+            registerRequirement(new DiscordRoleRequirement(), "discord_role");
+        }
     }
 }

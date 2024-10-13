@@ -32,16 +32,21 @@ public class AwakeningDataReader extends JsonReloadListener {
         map.clear();
         for (Map.Entry<ResourceLocation, JsonElement> entry : elementMap.entrySet()) {
             if (entry.getKey().getPath().startsWith("_")) continue;
+            boolean debug = entry.getValue().getAsJsonObject().has("debug");
+            List<List<RequirementInstance>> list = new ArrayList<>();
             for (JsonElement jsonArr : entry.getValue().getAsJsonObject().get("requirements").getAsJsonArray()) {
-                List<List<RequirementInstance>> list = new ArrayList<>();
+                List<RequirementInstance> innerList = new ArrayList<>();
                 for (JsonElement json : jsonArr.getAsJsonArray()) {
-                    List<RequirementInstance> innerList = new ArrayList<>();
                     try {
                         JsonObject object = json.getAsJsonObject();
                         String name = object.get("name").getAsString();
-                        innerList.add(ModRegistry.REQUIREMENTS.getValue(new ResourceLocation(name)).deserializeInstance(object.get("args").getAsJsonObject()));
+                        RequirementInstance args = ModRegistry.REQUIREMENTS.getValue(new ResourceLocation(name)).deserializeInstance(object.get("args").getAsJsonObject());
+                        if (debug) {
+                            LOGGER.debug(args);
+                        }
+                        innerList.add(args);
                     } catch (Exception e) {
-                        LOGGER.warn("Error while trying to process ability data {}", entry.getKey());
+                        LOGGER.warn("Error while trying to process awakening data {}", entry.getKey());
                         if (e instanceof NullPointerException) {
                             LOGGER.warn("'{}' requirement doesn't exist", json.getAsJsonObject().get("name").getAsString());
                         } else {
@@ -50,8 +55,13 @@ public class AwakeningDataReader extends JsonReloadListener {
                     }
                     list.add(innerList);
                 }
-                map.put(entry.getKey(), new RequirementSetInstance(list, entry.getKey().toString()));
             }
+            RequirementSetInstance reqs = new RequirementSetInstance(list, entry.getKey().toString());
+            if (debug) {
+                LOGGER.debug(reqs);
+            }
+            map.put(entry.getKey(), reqs);
         }
+        LOGGER.info("Ended Deserialization of awakenings data");
     }
 }

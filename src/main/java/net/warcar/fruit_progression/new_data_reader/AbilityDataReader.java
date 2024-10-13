@@ -32,10 +32,11 @@ public class AbilityDataReader extends JsonReloadListener {
         map.clear();
         for (Map.Entry<ResourceLocation, JsonElement> entry : elementMap.entrySet()) {
             if (entry.getKey().getPath().startsWith("_")) continue;
+            List<List<RequirementInstance>> list = new ArrayList<>();
+            boolean debug = entry.getValue().getAsJsonObject().has("debug");
             for (JsonElement jsonArr : entry.getValue().getAsJsonObject().get("requirements").getAsJsonArray()) {
-                List<List<RequirementInstance>> list = new ArrayList<>();
+                List<RequirementInstance> innerList = new ArrayList<>();
                 for (JsonElement json : jsonArr.getAsJsonArray()) {
-                    List<RequirementInstance> innerList = new ArrayList<>();
                     try {
                         JsonObject object = json.getAsJsonObject();
                         String name = object.get("name").getAsString();
@@ -48,10 +49,17 @@ public class AbilityDataReader extends JsonReloadListener {
                             e.printStackTrace();
                         }
                     }
-                    list.add(innerList);
+                    if (!innerList.isEmpty()) {
+                        list.add(innerList);
+                    }
                 }
-                map.put(entry.getKey(), new RequirementSetInstance(list, entry.getKey().toString()));
             }
+            RequirementSetInstance reqs = new RequirementSetInstance(list, entry.getKey().toString());
+            if (debug) {
+                LOGGER.debug(reqs);
+            }
+            map.put(entry.getKey(), reqs);
         }
+        LOGGER.info("Ended Deserialization of ability data");
     }
 }

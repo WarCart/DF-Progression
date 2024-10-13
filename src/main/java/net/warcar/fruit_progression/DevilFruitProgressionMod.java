@@ -13,6 +13,7 @@ import net.warcar.fruit_progression.data.entity.abilities_addition.AbilityAdditi
 import net.warcar.fruit_progression.init.ModRegistry;
 import net.warcar.fruit_progression.init.ModRequirements;
 import net.warcar.fruit_progression.new_data_reader.AbilityDataReader;
+import net.warcar.fruit_progression.new_data_reader.AwakeningDataReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,6 +39,7 @@ public class DevilFruitProgressionMod {
         @SubscribeEvent
         public static void addReloadListeners(AddReloadListenerEvent event) {
             event.addListener(new AbilityDataReader());
+            event.addListener(new AwakeningDataReader());
         }
     }
 }
