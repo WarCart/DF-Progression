@@ -3,13 +3,13 @@ package net.warcar.fruit_progression;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.warcar.fruit_progression.data.entity.abilities_addition.AbilityAdditionDataCapability;
-import net.warcar.fruit_progression.init.ModConfig;
 import net.warcar.fruit_progression.init.ModRegistry;
 import net.warcar.fruit_progression.init.ModRequirements;
 import net.warcar.fruit_progression.new_data_reader.AbilityDataReader;
@@ -26,7 +26,6 @@ public class DevilFruitProgressionMod {
         ModRegistry.REQUIREMENTS_REGISTER.register(bus);
         bus.addListener(this::setup);
         ModRequirements.register();
-        ModLoadingContext.get().registerConfig(Type.COMMON, ModConfig.SPEC);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -34,7 +33,11 @@ public class DevilFruitProgressionMod {
         AbilityAdditionDataCapability.register();
     }
 
-    private void addReloadListeners(final AddReloadListenerEvent event) {
-        event.addListener(new AbilityDataReader());
+    @Mod.EventBusSubscriber(modid = MOD_ID)
+    public static class Events {
+        @SubscribeEvent
+        public static void addReloadListeners(AddReloadListenerEvent event) {
+            event.addListener(new AbilityDataReader());
+        }
     }
 }

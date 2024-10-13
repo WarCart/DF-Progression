@@ -19,16 +19,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AbilityDataReader extends JsonReloadListener {
+public class AwakeningDataReader extends JsonReloadListener {
     public static final Map<ResourceLocation, RequirementSetInstance> map = new HashMap<>();
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
     private static final Logger LOGGER = LogManager.getLogger();
-    public AbilityDataReader() {
-        super(GSON, "abilities");
+    public AwakeningDataReader() {
+        super(GSON, "awakenings");
     }
 
     protected void apply(Map<ResourceLocation, JsonElement> elementMap, IResourceManager manager, IProfiler profiler) {
-        LOGGER.info("Started Deserialization of ability data");
+        LOGGER.info("Started Deserialization of awakenings data");
         map.clear();
         for (Map.Entry<ResourceLocation, JsonElement> entry : elementMap.entrySet()) {
             if (entry.getKey().getPath().startsWith("_")) continue;

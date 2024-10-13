@@ -12,12 +12,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import net.warcar.fruit_progression.data.entity.abilities_addition.AbilityAdditionDataCapability;
 import net.warcar.fruit_progression.data.entity.abilities_addition.AbilityAdditionDataProvider;
-import net.warcar.fruit_progression.init.ModConfig;
 import net.warcar.fruit_progression.new_data_reader.AbilityDataReader;
-import net.warcar.fruit_progression.requirements.Requirement;
-import net.warcar.fruit_progression.requirements.RequirementInstance;
+import net.warcar.fruit_progression.new_data_reader.AwakeningDataReader;
 import net.warcar.fruit_progression.requirements.RequirementSetInstance;
-import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.api.events.SetPlayerDetailsEvent;
 import xyz.pixelatedw.mineminenomi.api.events.ability.AbilityUseEvent;
 import xyz.pixelatedw.mineminenomi.api.events.ability.UnlockAbilityEvent;
@@ -26,8 +23,6 @@ import xyz.pixelatedw.mineminenomi.api.events.stats.HakiExpEvent;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.IDevilFruit;
 import xyz.pixelatedw.mineminenomi.events.abilities.AbilityProgressionEvents;
-
-import java.util.List;
 
 @Mod.EventBusSubscriber(modid = DevilFruitProgressionMod.MOD_ID)
 public class UnlockEvents {
@@ -44,25 +39,6 @@ public class UnlockEvents {
                 }
             }
         }
-    }
-
-    private static boolean isFulfilled(RequirementSetInstance instance, LivingEntity player, AbilityCore<?> core) {
-        List<List<RequirementInstance>> reqsSquared = instance.reqs;
-        boolean stoppedOuter = false;
-        if (reqsSquared != null) {
-            for (List<RequirementInstance> requirements : reqsSquared) {
-                boolean stoppedInner = true;
-                for (RequirementInstance requirement : requirements) {
-                    boolean reqOutput = requirement.getCore().requirementMet(player, core, requirement);
-                    if (requirement.isInverted()) {
-                        reqOutput = !reqOutput;
-                    }
-                    stoppedInner = stoppedInner && reqOutput;
-                }
-                stoppedOuter = stoppedOuter || stoppedInner;
-            }
-        }
-        return stoppedOuter;
     }
 
     @SubscribeEvent
@@ -96,7 +72,7 @@ public class UnlockEvents {
     private static void checkForAwakening(LivingEntity player) {
         IDevilFruit props = DevilFruitCapability.get(player);
         props.getDevilFruit().ifPresent(fruit -> {
-            RequirementSetInstance instance = ModConfig.INSTANCE.getAwakenings().get(fruit.toString());
+            RequirementSetInstance instance = AwakeningDataReader.map.get(fruit);
             if (instance != null) {
                 props.setAwakenedFruit(instance.isFulfilled(player, null));
             }
