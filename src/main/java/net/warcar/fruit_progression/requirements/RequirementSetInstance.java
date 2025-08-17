@@ -1,8 +1,15 @@
 package net.warcar.fruit_progression.requirements;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.ResourceLocation;
+import net.warcar.fruit_progression.DevilFruitProgressionMod;
+import net.warcar.fruit_progression.init.ModRegistry;
+import net.warcar.fruit_progression.new_data_reader.AbilityDataReader;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RequirementSetInstance {
@@ -48,5 +55,46 @@ public class RequirementSetInstance {
         }
         builder.append("]");
         return builder.toString();
+    }
+
+    public static RequirementSetInstance getRequirementSetInstance(JsonElement jsonElement, ResourceLocation location) {
+        List<List<RequirementInstance>> list = getListOfLists(jsonElement, location);
+        boolean debug = jsonElement.getAsJsonObject().has("debug");
+        RequirementSetInstance reqs = new RequirementSetInstance(list, location.toString());
+        if (debug) {
+            DevilFruitProgressionMod.LOGGER.debug(reqs);
+        }
+        return reqs;
+    }
+
+    public static List<List<RequirementInstance>> getListOfLists(JsonElement jsonElement, ResourceLocation location) {
+        List<List<RequirementInstance>> list = new ArrayList<>();
+        for (JsonElement jsonArr : jsonElement.getAsJsonObject().get("requirements").getAsJsonArray()) {
+            List<RequirementInstance> innerList = new ArrayList<>();
+            for (JsonElement json : jsonArr.getAsJsonArray()) {
+                try {
+                    JsonObject object = json.getAsJsonObject();
+                    String name = object.get("name").getAsString();
+                    JsonObject args;
+                    if (object.has("args")) {
+                        args = object.get("args").getAsJsonObject();
+                    } else {
+                        args = new JsonObject();
+                    }
+                    innerList.add(ModRegistry.REQUIREMENTS.getValue(new ResourceLocation(name)).deserializeInstance(args));
+                } catch (Exception e) {
+                    DevilFruitProgressionMod.LOGGER.warn("Error while trying to process ability data {}", location);
+                    if (e instanceof NullPointerException) {
+                        DevilFruitProgressionMod.LOGGER.warn("'{}' requirement doesn't exist", json.getAsJsonObject().get("name").getAsString());
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
+                if (!innerList.isEmpty()) {
+                    list.add(innerList);
+                }
+            }
+        }
+        return list;
     }
 }

@@ -31,8 +31,5 @@ public class ModRequirements {
         registerRequirement(new DefaultReqirement(), "default");
         registerRequirement(new LoyaltyRequirement(), "loyalty");
         registerRequirement(new UsedAbilityRequirement(), "ability_used");
-        if (ModList.get().isLoaded("dcintegration")) {
-            registerRequirement(new DiscordRoleRequirement(), "discord_role");
-        }
     }
 }

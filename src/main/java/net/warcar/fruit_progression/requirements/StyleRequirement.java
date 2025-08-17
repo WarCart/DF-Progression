@@ -4,15 +4,16 @@ import com.google.gson.JsonObject;
 import net.minecraft.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
+import xyz.pixelatedw.mineminenomi.api.charactercreator.StyleId;
 import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
 
 public class StyleRequirement extends Requirement {
     public StyleRequirement() {
-        super(String.class);
+        super(StyleId.class);
     }
 
     public boolean requirementMet(LivingEntity entity, AbilityCore<?> core, RequirementInstance instance) {
-        String style = EntityStatsCapability.get(entity).getFightingStyle();
+        String style = EntityStatsCapability.get(entity).getFightingStyle().toString();
         String required = instance.getValues()[0];
         if (instance.isDebug()) {
             DevilFruitProgressionMod.LOGGER.info("style: " + style);

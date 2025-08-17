@@ -4,7 +4,7 @@
       {
         "name": "ability_progression:unlocked_ability",
         "args": {
-          "ability": "gear_fifth"
+          "ability": "mineminenomi:gear_fifth"
         }
       }
     ]

@@ -8,6 +8,8 @@ import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.IDevilFruit;
 import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 
+import java.util.Objects;
+
 public class FruitRequirement extends Requirement {
     public FruitRequirement() {
         super(AkumaNoMiItem.class);
@@ -18,7 +20,7 @@ public class FruitRequirement extends Requirement {
         if (instance.isDebug()) {
             DevilFruitProgressionMod.LOGGER.info(fruit.getDevilFruit().get() + "/" + instance.getValues()[0]);
         }
-        boolean sameFruit = fruit.getDevilFruit().isPresent() && fruit.getDevilFruit().get().toString().equals(instance.getValues()[0]);
+        boolean sameFruit = fruit.getDevilFruit().map(Objects::toString).orElse("null").equals(instance.getValues()[0]);
         if (instance.getValues()[0].equals("mineminenomi:yami_yami_no_mi")) {
             return fruit.hasYamiPower() || sameFruit;
         }
