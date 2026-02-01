@@ -13,6 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RequirementSetInstance {
+    public static final RequirementSetInstance UNFINISHABLE = new RequirementSetInstance(new ArrayList<>(), "Unfinishable"){
+        @Override
+        public boolean isFulfilled(LivingEntity player, AbilityCore<?> core) {
+            return false;
+        }
+    };
     public final List<List<RequirementInstance>> reqs;
     public final String name;
 
@@ -58,13 +64,18 @@ public class RequirementSetInstance {
     }
 
     public static RequirementSetInstance getRequirementSetInstance(JsonElement jsonElement, ResourceLocation location) {
-        List<List<RequirementInstance>> list = getListOfLists(jsonElement, location);
-        boolean debug = jsonElement.getAsJsonObject().has("debug");
-        RequirementSetInstance reqs = new RequirementSetInstance(list, location.toString());
-        if (debug) {
-            DevilFruitProgressionMod.LOGGER.debug(reqs);
+        try {
+            List<List<RequirementInstance>> list = getListOfLists(jsonElement, location);
+            boolean debug = jsonElement.getAsJsonObject().has("debug");
+            RequirementSetInstance reqs = new RequirementSetInstance(list, location.toString());
+            if (debug) {
+                DevilFruitProgressionMod.LOGGER.debug(reqs);
+            }
+            return reqs;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return UNFINISHABLE;
         }
-        return reqs;
     }
 
     public static List<List<RequirementInstance>> getListOfLists(JsonElement jsonElement, ResourceLocation location) {
@@ -81,14 +92,15 @@ public class RequirementSetInstance {
                     } else {
                         args = new JsonObject();
                     }
-                    innerList.add(ModRegistry.REQUIREMENTS.getValue(new ResourceLocation(name)).deserializeInstance(args));
+                    Requirement value = ModRegistry.REQUIREMENTS.getValue(new ResourceLocation(name));
+                    if (value == null) {
+                        DevilFruitProgressionMod.LOGGER.warn("'{}' requirement doesn't exist", json.getAsJsonObject().get("name").getAsString());
+                        continue;
+                    }
+                    innerList.add(value.deserializeInstance(args));
                 } catch (Exception e) {
                     DevilFruitProgressionMod.LOGGER.warn("Error while trying to process ability data {}", location);
-                    if (e instanceof NullPointerException) {
-                        DevilFruitProgressionMod.LOGGER.warn("'{}' requirement doesn't exist", json.getAsJsonObject().get("name").getAsString());
-                    } else {
-                        e.printStackTrace();
-                    }
+                    e.printStackTrace();
                 }
                 if (!innerList.isEmpty()) {
                     list.add(innerList);

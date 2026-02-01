@@ -17,7 +17,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = 'reloaded-1.2.0'
+version = 'reloaded-1.2.0-hotfix'
 group = 'net.warcar.fruit_progression'
 archivesBaseName = 'fruit_progression'
 
@@ -151,8 +151,9 @@ dependencies {
     // compile "some.group:artifact:version"
 
     compileOnly 'de.erdbeerbaerlp:dcintegration.common:3.0.5-j8'
-    implementation fg.deobf("blank:cartaddon:0.6.3")
-    implementation fg.deobf("blank:mine-mine-no-mi-1.16.5:0.10.7")
+    //implementation fg.deobf("blank:cartaddon:0.6.3")
+    //implementation fg.deobf("blank:mine-mine-no-mi-1.16.5:0.10.7")
+    implementation fg.deobf("curse.maven:mine-mine-no-mi-78726:7090619")
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     implementation fg.deobf("xyz.pixelatedw.ziusudra:ziusudra:1.16.5-1.0.0.2")
 
