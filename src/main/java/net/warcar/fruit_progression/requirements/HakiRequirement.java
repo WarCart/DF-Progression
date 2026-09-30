@@ -1,12 +1,11 @@
 package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.api.enums.HakiType;
-import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.haki.HakiDataCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.haki.HakiCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.haki.IHakiData;
 
 public class HakiRequirement extends Requirement {
@@ -18,7 +17,7 @@ public class HakiRequirement extends Requirement {
     public boolean requirementMet(LivingEntity entity, AbilityCore<?> core, RequirementInstance instance) {
         float target = Float.parseFloat(instance.getValues()[0]);
         HakiType type = HakiType.valueOf(instance.getValues()[1]);
-        IHakiData data = HakiDataCapability.get(entity);
+        IHakiData data = HakiCapability.get(entity).get();
         boolean percentage;
         if (instance.getValues().length > 2) {
             percentage = Boolean.parseBoolean(instance.getValues()[2]);

@@ -1,7 +1,6 @@
 package net.warcar.fruit_progression.init;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.RegistryObject;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import net.warcar.fruit_progression.requirements.*;
@@ -12,8 +11,8 @@ public class ModRequirements {
     private static <T extends Requirement> void registerRequirement(T requirement, String resourceName) {
         ResourceLocation key = new ResourceLocation(DevilFruitProgressionMod.MOD_ID, resourceName);
         RegistryObject<AbilityCore<?>> ret = RegistryObject.of(key, ModRegistries.ABILITIES);
-        if (!ModRegistry.REQUIREMENTS_REGISTER.getEntries().contains(ret)) {
-            ModRegistry.REQUIREMENTS_REGISTER.register(resourceName, () -> requirement);
+        if (!net.warcar.fruit_progression.init.ModRegistries.REQUIREMENTS_REGISTER.getEntries().contains(ret)) {
+            net.warcar.fruit_progression.init.ModRegistries.REQUIREMENTS_REGISTER.register(resourceName, () -> requirement);
         }
     }
     public static void register() {

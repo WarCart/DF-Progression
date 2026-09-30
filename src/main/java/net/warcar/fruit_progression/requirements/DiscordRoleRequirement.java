@@ -1,5 +1,5 @@
 package net.warcar.fruit_progression.requirements;
-
+/*
 import com.google.gson.JsonObject;
 import de.erdbeerbaerlp.dcintegration.common.DiscordIntegration;
 import de.erdbeerbaerlp.dcintegration.common.storage.linking.LinkManager;
@@ -58,3 +58,4 @@ public class DiscordRoleRequirement extends Requirement {
     }
 
 }
+*/

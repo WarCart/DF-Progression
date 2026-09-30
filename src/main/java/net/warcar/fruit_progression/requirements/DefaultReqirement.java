@@ -1,7 +1,7 @@
 package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 
 public class DefaultReqirement extends Requirement {

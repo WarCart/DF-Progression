@@ -1,7 +1,7 @@
 package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
@@ -9,9 +9,9 @@ import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
 public class AwakeningRequirement extends Requirement {
     public boolean requirementMet(LivingEntity entity, AbilityCore<?> core, RequirementInstance instance) {
         if (instance.isDebug()) {
-            DevilFruitProgressionMod.LOGGER.info(DevilFruitCapability.get(entity).hasAwakenedFruit());
+            DevilFruitProgressionMod.LOGGER.info(DevilFruitCapability.get(entity).get().hasAwakenedFruit());
         }
-        return DevilFruitCapability.get(entity).hasAwakenedFruit();
+        return DevilFruitCapability.get(entity).get().hasAwakenedFruit();
     }
 
     public RequirementInstance deserializeInstance(JsonObject json) {

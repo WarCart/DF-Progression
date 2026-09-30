@@ -5,8 +5,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
-import net.warcar.fruit_progression.init.ModRegistry;
-import net.warcar.fruit_progression.new_data_reader.AbilityDataReader;
+import net.warcar.fruit_progression.init.ModRegistries;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 
 import java.util.ArrayList;
@@ -92,7 +91,7 @@ public class RequirementSetInstance {
                     } else {
                         args = new JsonObject();
                     }
-                    Requirement value = ModRegistry.REQUIREMENTS.getValue(new ResourceLocation(name));
+                    Requirement value = ModRegistries.REQUIREMENTS.getValue(new ResourceLocation(name));
                     if (value == null) {
                         DevilFruitProgressionMod.LOGGER.warn("'{}' requirement doesn't exist", json.getAsJsonObject().get("name").getAsString());
                         continue;

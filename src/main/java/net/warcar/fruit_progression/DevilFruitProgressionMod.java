@@ -12,7 +12,7 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.warcar.fruit_progression.data.entity.abilities_addition.AbilityAdditionDataCapability;
 import net.warcar.fruit_progression.data.entity.abilities_addition.SSyncAdditionalDataPacket;
-import net.warcar.fruit_progression.init.ModRegistry;
+import net.warcar.fruit_progression.init.ModRegistries;
 import net.warcar.fruit_progression.init.ModRequirements;
 import net.warcar.fruit_progression.new_data_reader.AbilityDataReader;
 import net.warcar.fruit_progression.new_data_reader.RequirementModifiersPile;
@@ -32,7 +32,7 @@ public class DevilFruitProgressionMod {
 
     public DevilFruitProgressionMod() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        ModRegistry.REQUIREMENTS_REGISTER.register(bus);
+        ModRegistries.REQUIREMENTS_REGISTER.register(bus);
         bus.addListener(this::setup);
         ModRequirements.register();
         INSTANCE.registerMessage(0, SSyncAdditionalDataPacket.class, SSyncAdditionalDataPacket::encode, SSyncAdditionalDataPacket::decode, SSyncAdditionalDataPacket::handle);

@@ -1,7 +1,7 @@
 package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
@@ -16,7 +16,7 @@ public class FruitRequirement extends Requirement {
     }
 
     public boolean requirementMet(LivingEntity entity, AbilityCore<?> core, RequirementInstance instance) {
-        IDevilFruit fruit = DevilFruitCapability.get(entity);
+        IDevilFruit fruit = DevilFruitCapability.get(entity).get();
         if (instance.isDebug()) {
             DevilFruitProgressionMod.LOGGER.info(fruit.getDevilFruit().get() + "/" + instance.getValues()[0]);
         }

@@ -1,9 +1,9 @@
 package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
-import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.stats.EntityStatsCapability;
 
 public class SubRaceRequirement extends Requirement {
     public SubRaceRequirement() {
@@ -11,7 +11,7 @@ public class SubRaceRequirement extends Requirement {
     }
 
     public boolean requirementMet(LivingEntity entity, AbilityCore<?> core, RequirementInstance instance) {
-        return EntityStatsCapability.get(entity).getSubRace().equalsIgnoreCase(instance.getValues()[0]);
+        return EntityStatsCapability.get(entity).get().getSubRace().get().getRegistryName().toString().equals(instance.getValues()[0]);
     }
 
     public RequirementInstance deserializeInstance(JsonObject json) {

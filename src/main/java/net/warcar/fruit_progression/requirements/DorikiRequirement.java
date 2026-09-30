@@ -1,11 +1,15 @@
 package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.config.CommonConfig;
-import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
+import xyz.pixelatedw.mineminenomi.config.GeneralConfig;
+import xyz.pixelatedw.mineminenomi.data.entity.stats.EntityStatsCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.stats.IEntityStats;
+
+import java.util.Optional;
 
 public class DorikiRequirement extends Requirement {
     public DorikiRequirement() {
@@ -21,12 +25,13 @@ public class DorikiRequirement extends Requirement {
         } else {
             percentage = false;
         }
+        IEntityStats stats = EntityStatsCapability.get(entity).get();
         if (percentage) {
-            if (instance.isDebug()) DevilFruitProgressionMod.LOGGER.info(EntityStatsCapability.get(entity).getDoriki() / CommonConfig.INSTANCE.getDorikiLimit() + "/" + targetDoriki);
-            return EntityStatsCapability.get(entity).getDoriki() / CommonConfig.INSTANCE.getDorikiLimit() >= targetDoriki;
+            if (instance.isDebug()) DevilFruitProgressionMod.LOGGER.info(stats.getDoriki() / GeneralConfig.DORIKI_LIMIT.get() + "/" + targetDoriki);
+            return stats.getDoriki() / GeneralConfig.DORIKI_LIMIT.get() >= targetDoriki;
         }
-        if (instance.isDebug()) DevilFruitProgressionMod.LOGGER.info(EntityStatsCapability.get(entity).getDoriki() + "/" + targetDoriki);
-        return EntityStatsCapability.get(entity).getDoriki() >= targetDoriki;
+        if (instance.isDebug()) DevilFruitProgressionMod.LOGGER.info(stats.getDoriki() + "/" + targetDoriki);
+        return stats.getDoriki() >= targetDoriki;
     }
 
     public RequirementInstance deserializeInstance(JsonObject json) {

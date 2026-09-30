@@ -49,11 +49,11 @@ public class ContinuousComponentMixin extends AbilityComponent<IAbility> impleme
         this.addBonusManager(bonusManager);
     }
 
-    @ModifyVariable(method = "startContinuity(Lnet/minecraft/entity/LivingEntity;F)V",
-            at = @At(value = "INVOKE", target = "Lxyz/pixelatedw/mineminenomi/api/abilities/components/ContinuousComponent;ensureIsRegistered()V"),
+    @ModifyVariable(method = "startContinuity(Lnet/minecraft/world/entity/LivingEntity;F)V",
+            at = @At(value = "INVOKE", target = "Lxyz/pixelatedw/mineminenomi/api/abilities/components/AbilityComponent;ensureIsRegistered()V"),
             remap = false, argsOnly = true)
-    private float modifyThreshold(float val) {
-        return bonusManager.applyBonus(val);
+    private float modifyThreshold(float threshold) {
+        return bonusManager.applyBonus(threshold);
     }
 
     @Override

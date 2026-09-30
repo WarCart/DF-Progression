@@ -1,15 +1,9 @@
 package net.warcar.fruit_progression.data.entity.abilities_addition;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.LazyOptional;
-import xyz.pixelatedw.mineminenomi.api.ModRegistries;
 
 public class AbilityAdditionDataCapability {
     @CapabilityInject(IAbilityAdditionData.class)

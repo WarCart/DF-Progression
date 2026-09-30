@@ -1,6 +1,6 @@
 package net.warcar.fruit_progression.requirements;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.warcar.fruit_progression.init.ModRegistries;
 
 import java.util.Arrays;
 
@@ -51,7 +51,7 @@ public class RequirementInstance {
         if (this.inverted) {
             builder.append("!");
         }
-        builder.append(GameRegistry.findRegistry(Requirement.class).getKey(core));
+        builder.append(ModRegistries.REQUIREMENTS.getKey(core));
         builder.append(", ");
         builder.append(Arrays.toString(args));
         return builder.toString();

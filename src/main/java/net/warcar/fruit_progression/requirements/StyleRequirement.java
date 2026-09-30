@@ -1,19 +1,19 @@
 package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
-import xyz.pixelatedw.mineminenomi.api.charactercreator.StyleId;
-import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
+import xyz.pixelatedw.mineminenomi.api.entities.charactercreator.FightingStyle;
+import xyz.pixelatedw.mineminenomi.data.entity.stats.EntityStatsCapability;
 
 public class StyleRequirement extends Requirement {
     public StyleRequirement() {
-        super(StyleId.class);
+        super(FightingStyle.class);
     }
 
     public boolean requirementMet(LivingEntity entity, AbilityCore<?> core, RequirementInstance instance) {
-        String style = EntityStatsCapability.get(entity).getFightingStyle().toString();
+        String style = EntityStatsCapability.get(entity).get().getFightingStyle().get().toString();
         String required = instance.getValues()[0];
         if (instance.isDebug()) {
             DevilFruitProgressionMod.LOGGER.info("style: " + style);

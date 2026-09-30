@@ -8,10 +8,10 @@ import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.IDevilFruit;
 
 @Mixin(DevilFruitBase.class)
 public abstract class DevilFruitDataMixin implements IDevilFruit {
-    @Shadow private boolean hasAwakenedFruit;
+    @Shadow(remap = false) private boolean hasAwakenedFruit;
 
     @Override
     public boolean hasAwakenedFruit() {
-        return this.hasAwakenedFruit && CommonConfig.INSTANCE.hasAwakeningsEnabled();
+        return this.hasAwakenedFruit;
     }
 }
