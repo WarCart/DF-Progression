@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
-import xyz.pixelatedw.mineminenomi.config.CommonConfig;
 import xyz.pixelatedw.mineminenomi.config.GeneralConfig;
 import xyz.pixelatedw.mineminenomi.data.entity.stats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.stats.IEntityStats;
@@ -25,12 +24,20 @@ public class DorikiRequirement extends Requirement {
         } else {
             percentage = false;
         }
-        IEntityStats stats = EntityStatsCapability.get(entity).get();
+        Optional<IEntityStats> statsOptional = EntityStatsCapability.get(entity);
+        if (statsOptional.isEmpty()) {
+            if (instance.isDebug()) {
+                DevilFruitProgressionMod.LOGGER.warn("Entity {} has no stats, can't check doriki", entity);
+            }
+            return false;
+        }
+        IEntityStats stats = statsOptional.get();
         if (percentage) {
-            if (instance.isDebug()) DevilFruitProgressionMod.LOGGER.info(stats.getDoriki() / GeneralConfig.DORIKI_LIMIT.get() + "/" + targetDoriki);
+            if (instance.isDebug())
+                DevilFruitProgressionMod.LOGGER.info("{}/{}", stats.getDoriki() / GeneralConfig.DORIKI_LIMIT.get(), targetDoriki);
             return stats.getDoriki() / GeneralConfig.DORIKI_LIMIT.get() >= targetDoriki;
         }
-        if (instance.isDebug()) DevilFruitProgressionMod.LOGGER.info(stats.getDoriki() + "/" + targetDoriki);
+        if (instance.isDebug()) DevilFruitProgressionMod.LOGGER.info("{}/{}", stats.getDoriki(), targetDoriki);
         return stats.getDoriki() >= targetDoriki;
     }
 

@@ -51,7 +51,7 @@ public class RequirementInstance {
         if (this.inverted) {
             builder.append("!");
         }
-        builder.append(ModRegistries.REQUIREMENTS.getKey(core));
+        builder.append(ModRegistries.REQUIREMENTS.get().getKey(core));
         builder.append(", ");
         builder.append(Arrays.toString(args));
         return builder.toString();

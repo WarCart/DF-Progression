@@ -3,18 +3,16 @@ package net.warcar.fruit_progression.new_data_reader;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import net.minecraft.client.resources.JsonReloadListener;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class AbilityDataReader<T> extends JsonReloadListener {
+public class AbilityDataReader<T> extends SimpleJsonResourceReloadListener {
     public final Map<ResourceLocation, T> map = new HashMap<>();
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
     private final String name;
@@ -26,7 +24,7 @@ public class AbilityDataReader<T> extends JsonReloadListener {
         this.provider = provider;
     }
 
-    protected void apply(Map<ResourceLocation, JsonElement> elementMap, IResourceManager manager, IProfiler profiler) {
+    protected void apply(Map<ResourceLocation, JsonElement> elementMap, ResourceManager manager, ProfilerFiller profiler) {
         DevilFruitProgressionMod.LOGGER.info("Started Deserialization of {} data", this.name);
         map.clear();
         for (Map.Entry<ResourceLocation, JsonElement> entry : elementMap.entrySet()) {

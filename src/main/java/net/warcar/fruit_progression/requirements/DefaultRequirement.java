@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.world.entity.LivingEntity;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 
-public class DefaultReqirement extends Requirement {
+public class DefaultRequirement extends Requirement {
     public boolean requirementMet(LivingEntity entity, AbilityCore<?> core, RequirementInstance instance) {
         if (core == null) {
             return false;

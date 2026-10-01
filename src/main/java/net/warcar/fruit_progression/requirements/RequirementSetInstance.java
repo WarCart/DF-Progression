@@ -2,8 +2,8 @@ package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import net.warcar.fruit_progression.init.ModRegistries;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
@@ -91,7 +91,7 @@ public class RequirementSetInstance {
                     } else {
                         args = new JsonObject();
                     }
-                    Requirement value = ModRegistries.REQUIREMENTS.getValue(new ResourceLocation(name));
+                    Requirement value = ModRegistries.REQUIREMENTS.get().getValue(ResourceLocation.parse(name));
                     if (value == null) {
                         DevilFruitProgressionMod.LOGGER.warn("'{}' requirement doesn't exist", json.getAsJsonObject().get("name").getAsString());
                         continue;

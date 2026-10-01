@@ -9,6 +9,7 @@ import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.IDevilFruit;
 import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class FruitRequirement extends Requirement {
     public FruitRequirement() {
@@ -16,11 +17,19 @@ public class FruitRequirement extends Requirement {
     }
 
     public boolean requirementMet(LivingEntity entity, AbilityCore<?> core, RequirementInstance instance) {
-        IDevilFruit fruit = DevilFruitCapability.get(entity).get();
-        if (instance.isDebug()) {
-            DevilFruitProgressionMod.LOGGER.info(fruit.getDevilFruit().get() + "/" + instance.getValues()[0]);
+        Optional<IDevilFruit> dataOptional = DevilFruitCapability.get(entity);
+        if (dataOptional.isEmpty()) {
+            if (instance.isDebug()) {
+                DevilFruitProgressionMod.LOGGER.warn("Entity {} has no devil fruit data, can't check", entity);
+            }
+            return false;
         }
-        boolean sameFruit = fruit.getDevilFruit().map(Objects::toString).orElse("null").equals(instance.getValues()[0]);
+        IDevilFruit fruit = dataOptional.get();
+        String df = fruit.getDevilFruit().map(Objects::toString).orElse("null");
+        if (instance.isDebug()) {
+            DevilFruitProgressionMod.LOGGER.info("{}/{}", df, instance.getValues()[0]);
+        }
+        boolean sameFruit = df.equals(instance.getValues()[0]);
         if (instance.getValues()[0].equals("mineminenomi:yami_yami_no_mi")) {
             return fruit.hasYamiPower() || sameFruit;
         }

@@ -1,21 +1,15 @@
 package net.warcar.fruit_progression.init;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
-import net.warcar.fruit_progression.DevilFruitProgressionMod;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.warcar.fruit_progression.requirements.*;
-import xyz.pixelatedw.mineminenomi.api.ModRegistries;
-import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 
 public class ModRequirements {
     private static <T extends Requirement> void registerRequirement(T requirement, String resourceName) {
-        ResourceLocation key = new ResourceLocation(DevilFruitProgressionMod.MOD_ID, resourceName);
-        RegistryObject<AbilityCore<?>> ret = RegistryObject.of(key, ModRegistries.ABILITIES);
-        if (!net.warcar.fruit_progression.init.ModRegistries.REQUIREMENTS_REGISTER.getEntries().contains(ret)) {
-            net.warcar.fruit_progression.init.ModRegistries.REQUIREMENTS_REGISTER.register(resourceName, () -> requirement);
-        }
+        ModRegistries.REQUIREMENTS_REGISTER.register(resourceName, () -> requirement);
     }
-    public static void register() {
+    public static void register(IEventBus bus) {
+        ModRegistries.REQUIREMENTS_REGISTER.register(bus);
+
         registerRequirement(new DorikiRequirement(), "doriki");
         registerRequirement(new HakiRequirement(), "haki");
         registerRequirement(new RaceRequirement(), "race");
@@ -27,7 +21,7 @@ public class ModRequirements {
         registerRequirement(new QuestRequirement(), "quest");
         registerRequirement(new HaoshokuBornRequirement(), "haoshoku_born");
         registerRequirement(new AbilityUnlockedRequirement(), "unlocked_ability");
-        registerRequirement(new DefaultReqirement(), "default");
+        registerRequirement(new DefaultRequirement(), "default");
         registerRequirement(new LoyaltyRequirement(), "loyalty");
         registerRequirement(new UsedAbilityRequirement(), "ability_used");
     }

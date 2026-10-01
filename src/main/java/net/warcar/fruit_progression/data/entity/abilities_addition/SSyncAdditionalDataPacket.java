@@ -1,34 +1,35 @@
 package net.warcar.fruit_progression.data.entity.abilities_addition;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class SSyncAdditionalDataPacket {
     private int entityId;
-    private CompoundNBT data;
+    private CompoundTag data;
 
     private SSyncAdditionalDataPacket() {}
 
     public SSyncAdditionalDataPacket(Entity entity, IAbilityAdditionData data) {
         this.entityId = entity.getId();
-        this.data = (CompoundNBT) AbilityAdditionDataCapability.INSTANCE.writeNBT(data, null);
+        this.data = (CompoundTag) data;
     }
 
-    public void encode(PacketBuffer buffer) {
+    public void encode(FriendlyByteBuf buffer) {
         buffer.writeInt(this.entityId);
         buffer.writeNbt(this.data);
     }
 
-    public static SSyncAdditionalDataPacket decode(PacketBuffer buffer) {
+    public static SSyncAdditionalDataPacket decode(FriendlyByteBuf buffer) {
         SSyncAdditionalDataPacket msg = new SSyncAdditionalDataPacket();
         msg.entityId = buffer.readInt();
         msg.data = buffer.readNbt();
@@ -49,9 +50,9 @@ public class SSyncAdditionalDataPacket {
         @OnlyIn(Dist.CLIENT)
         public static void handle(SSyncAdditionalDataPacket message) {
             Entity target = Minecraft.getInstance().level.getEntity(message.entityId);
-            if (target instanceof LivingEntity) {
-                IAbilityAdditionData props = AbilityAdditionDataCapability.get((LivingEntity)target);
-                AbilityAdditionDataCapability.INSTANCE.getStorage().readNBT(AbilityAdditionDataCapability.INSTANCE, props, null, message.data);
+            if (target instanceof LivingEntity entity) {
+                Optional<IAbilityAdditionData> props = AbilityAdditionDataCapability.get(entity);
+                props.ifPresent(data -> data.deserializeNBT(message.data));
             }
         }
     }

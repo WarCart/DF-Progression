@@ -1,9 +1,11 @@
 package net.warcar.fruit_progression.new_data_reader;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import xyz.pixelatedw.mineminenomi.api.enums.HakiType;
-import xyz.pixelatedw.mineminenomi.data.entity.entitystats.EntityStatsCapability;
-import xyz.pixelatedw.mineminenomi.data.entity.haki.HakiDataCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.haki.HakiCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.haki.IHakiData;
+import xyz.pixelatedw.mineminenomi.data.entity.stats.EntityStatsCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.stats.IEntityStats;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,10 +17,10 @@ public class EquationHelper {
     static {
         operators = new HashMap<>();
         //User based
-        operators.put("doriki", (user, numbers) -> EntityStatsCapability.get(user).getDoriki());
-        operators.put("totalHakiXp", (user, numbers) -> hakixp(user, HakiType.HAOSHOKU));
-        operators.put("busoHakiXp", (user, numbers) -> hakixp(user, HakiType.BUSOSHOKU));
-        operators.put("kenHakiXp", (user, numbers) -> hakixp(user, HakiType.KENBUNSHOKU));
+        operators.put("doriki", (user, numbers) -> EntityStatsCapability.get(user).map(IEntityStats::getDoriki).orElse(0.0));
+        operators.put("totalHakiXp", (user, numbers) -> hakiXp(user, HakiType.HAOSHOKU));
+        operators.put("busoHakiXp", (user, numbers) -> hakiXp(user, HakiType.BUSOSHOKU));
+        operators.put("kenHakiXp", (user, numbers) -> hakiXp(user, HakiType.KENBUNSHOKU));
         //Math
         //Unlimited
         operators.put("multiply", (user, numbers) -> multiply(numbers));
@@ -57,16 +59,12 @@ public class EquationHelper {
         return min;
     }
 
-    private static double hakixp(LivingEntity user, HakiType hakiType) {
-        switch (hakiType) {
-            case HAOSHOKU:
-                return HakiDataCapability.get(user).getTotalHakiExp();
-            case BUSOSHOKU:
-                return HakiDataCapability.get(user).getBusoshokuHakiExp();
-            case KENBUNSHOKU:
-            default:
-                return HakiDataCapability.get(user).getKenbunshokuHakiExp();
-        }
+    private static double hakiXp(LivingEntity user, HakiType hakiType) {
+        return switch (hakiType) {
+            case HAOSHOKU -> HakiCapability.get(user).map(IHakiData::getTotalHakiExp).orElse(0.0F);
+            case BUSOSHOKU -> HakiCapability.get(user).map(IHakiData::getBusoshokuHakiExp).orElse(0.0F);
+            default -> HakiCapability.get(user).map(IHakiData::getKenbunshokuHakiExp).orElse(0.0F);
+        };
     }
 
     private static double sqrt(double[] numbers) {

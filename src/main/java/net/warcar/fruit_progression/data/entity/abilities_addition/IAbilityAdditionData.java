@@ -1,5 +1,6 @@
 package net.warcar.fruit_progression.data.entity.abilities_addition;
 
+import net.minecraft.nbt.CompoundTag;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
 
@@ -17,4 +18,8 @@ public interface IAbilityAdditionData {
     default void addUsages(AbilityCore<? extends IAbility> ability) {
         this.addUsages(ability, 1);
     }
+
+    CompoundTag serializeNBT();
+
+    void deserializeNBT(CompoundTag nbt);
 }

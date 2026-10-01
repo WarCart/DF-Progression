@@ -2,90 +2,70 @@ package net.warcar.fruit_progression.new_data_reader;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.warcar.fruit_progression.data.entity.abilities_addition.IContinuousComponentMixin;
 import net.warcar.fruit_progression.requirements.RequirementSetInstance;
 import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.BonusManager;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.BonusOperation;
-import xyz.pixelatedw.mineminenomi.init.ModAbilityKeys;
+import xyz.pixelatedw.mineminenomi.init.ModAbilityComponents;
 
 import java.util.*;
 
-public class RequirementModifiersPile {
-    public final Map<ResourceLocation, List<Map<UUID, BonusManager.BonusValue>>> modifiers;
-    private final RequirementSetInstance requirementSetInstance;
-
-    public RequirementModifiersPile(Map<ResourceLocation, List<Map<UUID, BonusManager.BonusValue>>> modifiers, RequirementSetInstance instance) {
-        requirementSetInstance = instance;
-        this.modifiers = modifiers;
-    }
-
+public record RequirementModifiersPile(Map<ResourceLocation, List<Map<UUID, BonusManager.BonusValue>>> modifiers,
+                                       RequirementSetInstance requirementSetInstance) {
     public void apply(IAbility ability) {
         if (modifiers == null) return;
         for (ResourceLocation modifier : modifiers.keySet()) {
-            if (modifier.equals(ModAbilityKeys.COOLDOWN.getId())) {
-                ability.getComponent(ModAbilityKeys.COOLDOWN).ifPresent(cooldown -> {
+            if (modifier.equals(ModAbilityComponents.COOLDOWN.getId())) {
+                ability.getComponent(ModAbilityComponents.COOLDOWN.get()).ifPresent(cooldown -> {
                     BonusManager bonusManager = cooldown.getBonusManager();
-                    for (UUID uuid : modifiers.get(modifier).get(0).keySet()) {
-                        BonusManager.BonusValue value = modifiers.get(modifier).get(0).get(uuid);
-                        bonusManager.addBonus(uuid, value.getName(), value.getType(), value.getValue());
-                    }
+                    applyModifiers(modifier, bonusManager);
                 });
-            } else if (modifier.equals(ModAbilityKeys.CHARGE.getId())) {
-                ability.getComponent(ModAbilityKeys.CHARGE).ifPresent(charge -> {
+            } else if (modifier.equals(ModAbilityComponents.CHARGE.getId())) {
+                ability.getComponent(ModAbilityComponents.CHARGE.get()).ifPresent(charge -> {
                     BonusManager bonusManager = charge.getMaxChargeBonusManager();
-                    for (UUID uuid : modifiers.get(modifier).get(0).keySet()) {
-                        BonusManager.BonusValue value = modifiers.get(modifier).get(0).get(uuid);
-                        bonusManager.addBonus(uuid, value.getName(), value.getType(), value.getValue());
-                    }
+                    applyModifiers(modifier, bonusManager);
                 });
-            } else if (modifier.equals(ModAbilityKeys.DAMAGE.getId())) {
-                ability.getComponent(ModAbilityKeys.DAMAGE).ifPresent(damage -> {
+            } else if (modifier.equals(ModAbilityComponents.DAMAGE.getId())) {
+                ability.getComponent(ModAbilityComponents.DAMAGE.get()).ifPresent(damage -> {
                     BonusManager bonusManager = damage.getBonusManager();
-                    for (UUID uuid : modifiers.get(modifier).get(0).keySet()) {
-                        BonusManager.BonusValue value = modifiers.get(modifier).get(0).get(uuid);
-                        bonusManager.addBonus(uuid, value.getName(), value.getType(), value.getValue());
-                    }
+                    applyModifiers(modifier, bonusManager);
                 });
-            } else if (modifier.equals(ModAbilityKeys.HEAL.getId())) {
-                ability.getComponent(ModAbilityKeys.HEAL).ifPresent(heal -> {
+            } else if (modifier.equals(ModAbilityComponents.HEAL.getId())) {
+                ability.getComponent(ModAbilityComponents.HEAL.get()).ifPresent(heal -> {
                     BonusManager bonusManager = heal.getBonusManager();
-                    for (UUID uuid : modifiers.get(modifier).get(0).keySet()) {
-                        BonusManager.BonusValue value = modifiers.get(modifier).get(0).get(uuid);
-                        bonusManager.addBonus(uuid, value.getName(), value.getType(), value.getValue());
-                    }
+                    applyModifiers(modifier, bonusManager);
                 });
-            } else if (modifier.equals(ModAbilityKeys.RANGE.getId())) {
-                ability.getComponent(ModAbilityKeys.RANGE).ifPresent(range -> {
+            } else if (modifier.equals(ModAbilityComponents.RANGE.getId())) {
+                ability.getComponent(ModAbilityComponents.RANGE.get()).ifPresent(range -> {
                     BonusManager bonusManager = range.getBonusManager();
-                    for (UUID uuid : modifiers.get(modifier).get(0).keySet()) {
-                        BonusManager.BonusValue value = modifiers.get(modifier).get(0).get(uuid);
-                        bonusManager.addBonus(uuid, value.getName(), value.getType(), value.getValue());
-                    }
+                    applyModifiers(modifier, bonusManager);
                 });
-            } else if (modifier.equals(ModAbilityKeys.PROJECTILE.getId())) {
-                ability.getComponent(ModAbilityKeys.PROJECTILE).ifPresent(range -> {
+            } else if (modifier.equals(ModAbilityComponents.PROJECTILE.getId())) {
+                ability.getComponent(ModAbilityComponents.PROJECTILE.get()).ifPresent(range -> {
                     BonusManager bonusManager = range.getDamageBonusManager();
-                    for (UUID uuid : modifiers.get(modifier).get(0).keySet()) {
-                        BonusManager.BonusValue value = modifiers.get(modifier).get(0).get(uuid);
-                        bonusManager.addBonus(uuid, value.getName(), value.getType(), value.getValue());
-                    }
+                    applyModifiers(modifier, 0, bonusManager);
                     BonusManager bonusManager1 = range.getInaccuracyBonusManager();
-                    for (UUID uuid : modifiers.get(modifier).get(1).keySet()) {
-                        BonusManager.BonusValue value = modifiers.get(modifier).get(1).get(uuid);
-                        bonusManager1.addBonus(uuid, value.getName(), value.getType(), value.getValue());
-                    }
+                    applyModifiers(modifier, 1, bonusManager1);
                 });
-            } else if (modifier.equals(ModAbilityKeys.CONTINUOUS.getId())) {
-                ability.getComponent(ModAbilityKeys.CONTINUOUS).ifPresent(continuous -> {
-                    BonusManager bonusManager = ((IContinuousComponentMixin) continuous).getBonusManager();
-                    for (UUID uuid : modifiers.get(modifier).get(0).keySet()) {
-                        BonusManager.BonusValue value = modifiers.get(modifier).get(0).get(uuid);
-                        bonusManager.addBonus(uuid, value.getName(), value.getType(), value.getValue());
-                    }
+            } else if (modifier.equals(ModAbilityComponents.CONTINUOUS.getId())) {
+                ability.getComponent(ModAbilityComponents.CONTINUOUS.get()).ifPresent(continuous -> {
+                    BonusManager bonusManager = ((IContinuousComponentMixin) continuous).ability_progression$getBonusManager();
+                    applyModifiers(modifier, bonusManager);
                 });
             }
+        }
+    }
+
+    private void applyModifiers(ResourceLocation modifier, BonusManager bonusManager) {
+        applyModifiers(modifier, 0, bonusManager);
+    }
+
+    private void applyModifiers(ResourceLocation modifier, int index, BonusManager bonusManager) {
+        for (UUID uuid : modifiers.get(modifier).get(index).keySet()) {
+            BonusManager.BonusValue value = modifiers.get(modifier).get(index).get(uuid);
+            bonusManager.addBonus(uuid, value.getName(), value.getType(), value.getValue());
         }
     }
 
@@ -97,13 +77,12 @@ public class RequirementModifiersPile {
         } else {
             requirementSet = null;
         }
-        boolean debug = object.has("debug");
         Map<ResourceLocation, List<Map<UUID, BonusManager.BonusValue>>> modifiers;
         if (object.has("modifiers")) {
             JsonObject mods = object.getAsJsonObject("modifiers");
             modifiers = new HashMap<>();
             for (Map.Entry<String, JsonElement> s : mods.entrySet()) {
-                ResourceLocation id = new ResourceLocation(s.getKey());
+                ResourceLocation id = ResourceLocation.parse(s.getKey());
                 List<Map<UUID, BonusManager.BonusValue>> list = new ArrayList<>();
                 for (JsonElement mod : s.getValue().getAsJsonArray()) {
                     Map<UUID, BonusManager.BonusValue> values = new HashMap<>();
@@ -114,7 +93,7 @@ public class RequirementModifiersPile {
                         BonusOperation operation = BonusOperation.valueOf(bonus.get("type").getAsString().toUpperCase());
                         String name = bonus.get("name").getAsString();
                         float number = bonus.get("value").getAsFloat();
-                        values.put(uuid, new BonusManager.BonusValue(name, operation, number));
+                        values.put(uuid, new BonusManager.BonusValue(uuid, name, operation, number));
                     }
                     list.add(values);
                 }
@@ -123,13 +102,6 @@ public class RequirementModifiersPile {
         } else {
             modifiers = new HashMap<>();
         }
-        RequirementModifiersPile pile = new RequirementModifiersPile(modifiers, requirementSet);
-        if (debug) {
-        }
-        return pile;
-    }
-
-    public RequirementSetInstance getRequirementSetInstance() {
-        return requirementSetInstance;
+        return new RequirementModifiersPile(modifiers, requirementSet);
     }
 }

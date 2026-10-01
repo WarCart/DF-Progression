@@ -8,6 +8,8 @@ import xyz.pixelatedw.mineminenomi.api.enums.HakiType;
 import xyz.pixelatedw.mineminenomi.data.entity.haki.HakiCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.haki.IHakiData;
 
+import java.util.Optional;
+
 public class HakiRequirement extends Requirement {
     public HakiRequirement() {
         super(Float.TYPE, HakiType.class);
@@ -17,7 +19,14 @@ public class HakiRequirement extends Requirement {
     public boolean requirementMet(LivingEntity entity, AbilityCore<?> core, RequirementInstance instance) {
         float target = Float.parseFloat(instance.getValues()[0]);
         HakiType type = HakiType.valueOf(instance.getValues()[1]);
-        IHakiData data = HakiCapability.get(entity).get();
+        Optional<IHakiData> hakiOptional = HakiCapability.get(entity);
+        if (hakiOptional.isEmpty()) {
+            if (instance.isDebug()) {
+                DevilFruitProgressionMod.LOGGER.warn("Entity {} has no haki data, can't check", entity);
+            }
+            return false;
+        }
+        IHakiData data = hakiOptional.get();
         boolean percentage;
         if (instance.getValues().length > 2) {
             percentage = Boolean.parseBoolean(instance.getValues()[2]);
@@ -29,10 +38,11 @@ public class HakiRequirement extends Requirement {
         else if (type == HakiType.BUSOSHOKU) haki = data.getBusoshokuHakiExp();
         else haki = data.getKenbunshokuHakiExp();
         if (percentage) {
-            if (instance.isDebug()) DevilFruitProgressionMod.LOGGER.info(type + ":" + haki * 2 / data.getMaxHakiExp() + "/" + target);
+            if (instance.isDebug())
+                DevilFruitProgressionMod.LOGGER.info("{}:{}/{}", type, haki * 2 / data.getMaxHakiExp(), target);
             return haki * 2 / data.getMaxHakiExp() >= target;
         }
-        if (instance.isDebug()) DevilFruitProgressionMod.LOGGER.info(type + ":" + haki + "/" + target);
+        if (instance.isDebug()) DevilFruitProgressionMod.LOGGER.info("{}:{}/{}", type, haki, target);
         return haki >= target;
     }
 
