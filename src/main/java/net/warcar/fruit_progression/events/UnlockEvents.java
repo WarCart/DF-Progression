@@ -9,6 +9,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import net.warcar.fruit_progression.data.entity.abilities_addition.AbilityAdditionDataCapability;
@@ -27,7 +28,7 @@ import xyz.pixelatedw.mineminenomi.handlers.ability.ProgressionHandler;
 import xyz.pixelatedw.mineminenomi.init.ModNetwork;
 import xyz.pixelatedw.mineminenomi.packets.server.SSyncDevilFruitPacket;
 
-//@Mod.EventBusSubscriber(modid = DevilFruitProgressionMod.MOD_ID)
+@Mod.EventBusSubscriber(modid = DevilFruitProgressionMod.MOD_ID)
 public class UnlockEvents {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onUnlock(UnlockAbilityEvent event) {
@@ -47,7 +48,7 @@ public class UnlockEvents {
     @SubscribeEvent
     public static void onHakiCheck(HakiExpEvent.Post event) {
         checkForAwakening(event.getEntity());
-        ProgressionHandler.checkForDevilFruitUnlocks(event.getEntity());
+        ProgressionHandler.checkAllForNewUnlocks(event.getEntity(), true);
     }
 
     @SubscribeEvent
@@ -55,7 +56,7 @@ public class UnlockEvents {
         if (event.getEntity() instanceof Player player) {
             AbilityAdditionDataCapability.get(player).ifPresent(cap -> cap.addUsages(event.getAbility().getCore()));
             checkForAwakening(player);
-            ProgressionHandler.checkForDevilFruitUnlocks(player);
+            ProgressionHandler.checkAllForNewUnlocks(player, true);
         }
     }
 
@@ -72,19 +73,17 @@ public class UnlockEvents {
     }
 
     private static void checkForAwakening(LivingEntity player) {
-        DevilFruitCapability.get(player).ifPresent(props -> {
-            props.getDevilFruit().ifPresent(fruit -> {
-                RequirementSetInstance instance = DevilFruitProgressionMod.AWAKENINGS_READER.map.get(fruit);
-                if (instance != null) {
-                    if (props.hasAwakenedFruit() != instance.isFulfilled(player, null)) {
-                        props.setAwakenedFruit(instance.isFulfilled(player, null));
-                        if (player instanceof Player) {
-                            ModNetwork.sendTo(new SSyncDevilFruitPacket(player, props), (Player) player);
-                        }
+        DevilFruitCapability.get(player).ifPresent(props -> props.getDevilFruit().ifPresent(fruit -> {
+            RequirementSetInstance instance = DevilFruitProgressionMod.AWAKENINGS_READER.map.get(fruit);
+            if (instance != null) {
+                if (props.hasAwakenedFruit() != instance.isFulfilled(player, null)) {
+                    props.setAwakenedFruit(instance.isFulfilled(player, null));
+                    if (player instanceof Player) {
+                        ModNetwork.sendTo(new SSyncDevilFruitPacket(player, props), (Player) player);
                     }
                 }
-            });
-        });
+            }
+        }));
     }
 
     @SubscribeEvent
@@ -97,9 +96,8 @@ public class UnlockEvents {
     @SubscribeEvent
     public static void onPlayerChangeDimensions(PlayerEvent.PlayerChangedDimensionEvent event) {
         Player player = event.getEntity();
-        AbilityAdditionDataCapability.get(player).ifPresent(props -> {
-            DevilFruitProgressionMod.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player), new SSyncAdditionalDataPacket(player, props));
-        });
+        AbilityAdditionDataCapability.get(player).ifPresent(props -> 
+                DevilFruitProgressionMod.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player), new SSyncAdditionalDataPacket(player, props)));
     }
 
     @SubscribeEvent
