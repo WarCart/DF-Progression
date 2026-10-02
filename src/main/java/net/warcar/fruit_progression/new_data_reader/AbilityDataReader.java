@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AbilityDataReader<T> extends SimpleJsonResourceReloadListener {
-    public final Map<ResourceLocation, T> map = new HashMap<>();
+    protected final Map<ResourceLocation, T> map = new HashMap<>();
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
     private final String name;
     private final Provider<T> provider;
@@ -32,6 +32,14 @@ public class AbilityDataReader<T> extends SimpleJsonResourceReloadListener {
             map.put(entry.getKey(), provider.get(entry.getValue(), entry.getKey()));
         }
         DevilFruitProgressionMod.LOGGER.info("Ended Deserialization of {} data", name);
+    }
+
+    public boolean contains(ResourceLocation location) {
+        return this.map.containsKey(location);
+    }
+
+    public T get(ResourceLocation location) {
+        return this.map.get(location);
     }
 
     @FunctionalInterface

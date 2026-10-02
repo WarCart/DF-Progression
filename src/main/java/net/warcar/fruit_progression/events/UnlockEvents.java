@@ -33,8 +33,8 @@ public class UnlockEvents {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onUnlock(UnlockAbilityEvent event) {
         ResourceLocation location = event.getAbilityCore().getRegistryKey();
-        if (location != null && DevilFruitProgressionMod.ABILITIES_READER.map.containsKey(location)) {
-            RequirementSetInstance instance = DevilFruitProgressionMod.ABILITIES_READER.map.get(location).requirementSetInstance();
+        if (location != null && DevilFruitProgressionMod.ABILITIES_READER.contains(location)) {
+            RequirementSetInstance instance = DevilFruitProgressionMod.ABILITIES_READER.get(location).requirementSetInstance();
             if (instance != null) {
                 if (instance.isFulfilled(event.getEntity(), event.getAbilityCore())) {
                     event.setResult(Event.Result.ALLOW);
@@ -74,7 +74,7 @@ public class UnlockEvents {
 
     private static void checkForAwakening(LivingEntity player) {
         DevilFruitCapability.get(player).ifPresent(props -> props.getDevilFruit().ifPresent(fruit -> {
-            RequirementSetInstance instance = DevilFruitProgressionMod.AWAKENINGS_READER.map.get(fruit);
+            RequirementSetInstance instance = DevilFruitProgressionMod.AWAKENINGS_READER.get(fruit);
             if (instance != null) {
                 if (props.hasAwakenedFruit() != instance.isFulfilled(player, null)) {
                     props.setAwakenedFruit(instance.isFulfilled(player, null));
@@ -104,8 +104,8 @@ public class UnlockEvents {
     public static void onAbilityEquipped(EquipAbilityEvent event) {
         IAbility ability = event.getAbility();
         ResourceLocation name = ability.getCore().getRegistryKey();
-        if (name != null && DevilFruitProgressionMod.ABILITIES_READER.map.containsKey(name)) {
-            RequirementModifiersPile pile = DevilFruitProgressionMod.ABILITIES_READER.map.get(name);
+        if (name != null && DevilFruitProgressionMod.ABILITIES_READER.contains(name)) {
+            RequirementModifiersPile pile = DevilFruitProgressionMod.ABILITIES_READER.get(name);
             pile.apply(ability);
         }
     }

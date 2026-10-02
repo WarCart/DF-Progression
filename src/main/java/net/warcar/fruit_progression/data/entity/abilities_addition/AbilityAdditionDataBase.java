@@ -2,6 +2,7 @@ package net.warcar.fruit_progression.data.entity.abilities_addition;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import xyz.pixelatedw.mineminenomi.api.WyRegistry;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 public class AbilityAdditionDataBase implements IAbilityAdditionData {
     private final Map<AbilityCore<? extends IAbility>, Integer> map;
+    private float devilFruitMastery;
 
     public AbilityAdditionDataBase() {
         this.map = new HashMap<>();
@@ -36,15 +38,24 @@ public class AbilityAdditionDataBase implements IAbilityAdditionData {
         }
     }
 
+    public float getDevilFruitMastery() {
+        return this.devilFruitMastery;
+    }
+
+    public void setDevilFruitMastery(float mastery) {
+        this.devilFruitMastery = Mth.clamp(mastery, 0, 100);
+    }
+
     public CompoundTag serializeNBT() {
         CompoundTag props = new CompoundTag();
         CompoundTag map = new CompoundTag();
-        this.getMap().forEach((core, q) -> {
+        this.getMap().forEach((core, uses) -> {
             if (core != null && core.getRegistryKey() != null) {
-                map.putInt(core.getRegistryKey().toString(), q);
+                map.putInt(core.getRegistryKey().toString(), uses);
             }
         });
         props.put("map", map);
+        props.putFloat("devilFruitMastery", this.devilFruitMastery);
         return props;
     }
 
@@ -53,5 +64,6 @@ public class AbilityAdditionDataBase implements IAbilityAdditionData {
         for (String name : compoundNBT.getAllKeys()) {
             this.setUsages(WyRegistry.ABILITIES.get().getValue(ResourceLocation.parse(name)), compoundNBT.getInt(name));
         }
+        this.devilFruitMastery = nbt.getFloat("devilFruitMastery");
     }
 }

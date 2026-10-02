@@ -30,6 +30,7 @@ public class DevilFruitProgressionMod {
 
     public static final AbilityDataReader<RequirementModifiersPile> ABILITIES_READER = new AbilityDataReader<>("abilities", RequirementModifiersPile::getFromJson);
     public static final AbilityDataReader<RequirementSetInstance> AWAKENINGS_READER = new AbilityDataReader<>("awakenings", RequirementSetInstance::getRequirementSetInstance);
+    public static final AbilityDataReader<RequirementSetInstance> SAVED_REQUIREMENTS_READER = new AbilityDataReader<>("saved_requirements", RequirementSetInstance::getRequirementSetInstance);
 
     public DevilFruitProgressionMod(FMLJavaModLoadingContext context) {
         IEventBus bus = context.getModEventBus();
@@ -49,6 +50,7 @@ public class DevilFruitProgressionMod {
         public static void addReloadListeners(AddReloadListenerEvent event) {
             event.addListener(ABILITIES_READER);
             event.addListener(AWAKENINGS_READER);
+            event.addListener(SAVED_REQUIREMENTS_READER);
         }
     }
 }

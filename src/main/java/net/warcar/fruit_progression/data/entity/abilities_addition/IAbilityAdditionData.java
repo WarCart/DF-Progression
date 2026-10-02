@@ -19,6 +19,14 @@ public interface IAbilityAdditionData {
         this.addUsages(ability, 1);
     }
 
+    float getDevilFruitMastery();
+
+    void setDevilFruitMastery(float mastery);
+
+    default void addDevilFruitMastery(float mastery) {
+        this.setDevilFruitMastery(this.getDevilFruitMastery() + mastery);
+    }
+
     CompoundTag serializeNBT();
 
     void deserializeNBT(CompoundTag nbt);

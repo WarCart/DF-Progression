@@ -1,11 +1,9 @@
 package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
-import net.warcar.fruit_progression.init.ModRegistries;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 
 import java.util.ArrayList;
@@ -83,29 +81,20 @@ public class RequirementSetInstance {
             List<RequirementInstance> innerList = new ArrayList<>();
             for (JsonElement json : jsonArr.getAsJsonArray()) {
                 try {
-                    JsonObject object = json.getAsJsonObject();
-                    String name = object.get("name").getAsString();
-                    JsonObject args;
-                    if (object.has("args")) {
-                        args = object.get("args").getAsJsonObject();
-                    } else {
-                        args = new JsonObject();
+                    RequirementInstance instance = RequirementInstance.deserialize(json);
+                    if (instance != null) {
+                        innerList.add(instance);
                     }
-                    Requirement value = ModRegistries.REQUIREMENTS.get().getValue(ResourceLocation.parse(name));
-                    if (value == null) {
-                        DevilFruitProgressionMod.LOGGER.warn("'{}' requirement doesn't exist", json.getAsJsonObject().get("name").getAsString());
-                        continue;
-                    }
-                    innerList.add(value.deserializeInstance(args));
                 } catch (Exception e) {
                     DevilFruitProgressionMod.LOGGER.warn("Error while trying to process ability data {}", location);
                     e.printStackTrace();
                 }
-                if (!innerList.isEmpty()) {
-                    list.add(innerList);
-                }
+            }
+            if (!innerList.isEmpty()) {
+                list.add(innerList);
             }
         }
         return list;
     }
+
 }

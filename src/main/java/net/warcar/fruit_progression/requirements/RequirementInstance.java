@@ -1,5 +1,9 @@
 package net.warcar.fruit_progression.requirements;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import net.minecraft.resources.ResourceLocation;
+import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import net.warcar.fruit_progression.init.ModRegistries;
 
 import java.util.Arrays;
@@ -55,5 +59,35 @@ public class RequirementInstance {
         builder.append(", ");
         builder.append(Arrays.toString(args));
         return builder.toString();
+    }
+
+    static RequirementInstance deserialize(JsonElement json) {
+        JsonObject object = json.getAsJsonObject();
+        String name = object.get("name").getAsString();
+        boolean debug = false;
+        boolean inverted = false;
+        if (name.startsWith("D")) {
+            debug = true;
+            name = name.substring(1);
+        }
+        if (name.startsWith("!")) {
+            inverted = true;
+            name = name.substring(1);
+        }
+        JsonObject args;
+        if (object.has("args")) {
+            args = object.get("args").getAsJsonObject();
+        } else {
+            args = new JsonObject();
+        }
+        Requirement value = ModRegistries.REQUIREMENTS.get().getValue(ResourceLocation.parse(name));
+        if (value == null) {
+            DevilFruitProgressionMod.LOGGER.warn("'{}' requirement doesn't exist", json.getAsJsonObject().get("name").getAsString());
+            return null;
+        }
+        RequirementInstance instance = value.deserializeInstance(args);
+        instance.setDebug(debug);
+        instance.setInverted(inverted);
+        return instance;
     }
 }

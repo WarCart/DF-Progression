@@ -1,0 +1,88 @@
+{
+  "nodes": [
+    {
+      "requirements": [
+        [
+          {
+            "name": "ability_progression:doriki",
+            "args": {
+              "doriki": 9000
+            }
+          },
+          {
+            "name": "ability_progression:race",
+            "args": {
+              "race": "mineminenomi:human"
+            }
+          },
+          {
+            "name": "ability_progression:training_points",
+            "args": {
+              "points": 10,
+              "type": "MARTIAL_ARTS"
+            }
+          }
+        ],
+        [
+          {
+            "name": "ability_progression:doriki",
+            "args": {
+              "doriki": 9000
+            }
+          },
+          {
+            "name": "ability_progression:training_points",
+            "args": {
+              "points": 15,
+              "type": "MARTIAL_ARTS"
+            }
+          }
+        ]
+      ],
+      "pos": {
+        "x": 7.0,
+        "y": 0.0
+      },
+      "prerequisites": [
+        "mineminenomi:geppo",
+        "mineminenomi:tekkai",
+        "mineminenomi:rankyaku",
+        "mineminenomi:soru",
+        "mineminenomi:shigan",
+        "mineminenomi:kamie"
+      ],
+      "on_unlocked": [
+        {
+          "action": "ability_progression:remove_points",
+          "only_if": {
+            "name": "ability_progression:race",
+            "args": {
+              "race": "mineminenomi:human"
+            }
+          },
+          "args": {
+            "points": 10
+          }
+        },
+        {
+          "action": "ability_progression:remove_points",
+          "only_if": {
+            "name": "!ability_progression:race",
+            "args": {
+              "race": "mineminenomi:human"
+            }
+          },
+          "args": {
+            "points": 15
+          }
+        },
+        {
+          "action": "ability_progression:unlock_ability",
+          "args": {
+            "points": 15
+          }
+        }
+      ]
+    }
+  ]
+}
