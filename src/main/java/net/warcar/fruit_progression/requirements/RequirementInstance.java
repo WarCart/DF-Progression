@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class RequirementInstance {
     private final Requirement core;
-    private String[] args;
+    private String[] args = {};
     private boolean inverted;
     private boolean debug;
 

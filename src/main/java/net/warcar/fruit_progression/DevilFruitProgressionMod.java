@@ -48,9 +48,9 @@ public class DevilFruitProgressionMod {
     public static class Events {
         @SubscribeEvent
         public static void addReloadListeners(AddReloadListenerEvent event) {
+            event.addListener(SAVED_REQUIREMENTS_READER);
             event.addListener(ABILITIES_READER);
             event.addListener(AWAKENINGS_READER);
-            event.addListener(SAVED_REQUIREMENTS_READER);
         }
     }
 }
