@@ -35,9 +35,15 @@ public class RequirementSetInstance {
                     if (requirement.isInverted()) {
                         reqOutput = !reqOutput;
                     }
-                    stoppedInner = stoppedInner && reqOutput;
+                    if (!reqOutput) {
+                        stoppedInner = false;
+                        break;
+                    }
                 }
-                stoppedOuter = stoppedOuter || stoppedInner;
+                if (stoppedInner) {
+                    stoppedOuter = true;
+                    break;
+                }
             }
         }
         return stoppedOuter;
@@ -63,7 +69,7 @@ public class RequirementSetInstance {
     public static RequirementSetInstance getRequirementSetInstance(JsonElement jsonElement, ResourceLocation location) {
         try {
             List<List<RequirementInstance>> list = getListOfLists(jsonElement, location);
-            boolean debug = jsonElement.getAsJsonObject().has("debug");
+            boolean debug = jsonElement.getAsJsonObject().has("debug") && jsonElement.getAsJsonObject().get("debug").getAsBoolean();
             RequirementSetInstance reqs = new RequirementSetInstance(list, location.toString());
             if (debug) {
                 DevilFruitProgressionMod.LOGGER.debug(reqs);

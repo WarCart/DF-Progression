@@ -2,9 +2,9 @@
   "requirements": [
     [
       {
-        "name": "ability_progression:unlocked_ability",
+        "name": "ability_progression:saved",
         "args": {
-          "ability": "mineminenomi:gear_fifth"
+          "requirement": "awakened_gomu"
         }
       }
     ]

@@ -1,6 +1,6 @@
 package net.warcar.fruit_progression.mixins;
 
-import net.warcar.fruit_progression.data.entity.abilities_addition.IContinuousComponentMixin;
+import net.warcar.fruit_progression.data.mixin_interfaces.IContinuousComponentMixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;

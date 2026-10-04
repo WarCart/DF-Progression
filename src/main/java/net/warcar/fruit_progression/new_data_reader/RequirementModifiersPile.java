@@ -3,7 +3,7 @@ package net.warcar.fruit_progression.new_data_reader;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
-import net.warcar.fruit_progression.data.entity.abilities_addition.IContinuousComponentMixin;
+import net.warcar.fruit_progression.data.mixin_interfaces.IContinuousComponentMixin;
 import net.warcar.fruit_progression.requirements.RequirementSetInstance;
 import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
 import xyz.pixelatedw.mineminenomi.api.abilities.components.BonusManager;

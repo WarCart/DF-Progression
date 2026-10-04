@@ -1,4 +1,4 @@
-package net.warcar.fruit_progression.data.entity.abilities_addition;
+package net.warcar.fruit_progression.data.mixin_interfaces;
 
 import xyz.pixelatedw.mineminenomi.api.abilities.components.BonusManager;
 

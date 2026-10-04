@@ -13,6 +13,7 @@ public class ModRequirements {
     public static void register(IEventBus bus) {
         ModRegistries.REQUIREMENTS_REGISTER.register(bus);
 
+        registerRequirement(new AlwaysTrueRequirement(), "always");
         registerRequirement(new DorikiRequirement(), "doriki");
         registerRequirement(new HakiRequirement(), "haki");
         registerRequirement(new RaceRequirement(), "race");

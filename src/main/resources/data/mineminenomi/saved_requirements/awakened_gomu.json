@@ -1,0 +1,15 @@
+{
+  "requirements": [
+    [
+      {
+        "name": "ability_progression:awakening"
+      },
+      {
+        "name": "ability_progression:devil_fruit",
+        "args": {
+          "fruitID": "mineminenomi:gomu_gomu_no_mi"
+        }
+      }
+    ]
+  ]
+}
