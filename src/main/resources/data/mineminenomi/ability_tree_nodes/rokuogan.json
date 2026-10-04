@@ -80,7 +80,7 @@
     {
       "action": "ability_progression:unlock_ability",
       "args": {
-        "points": 15
+        "ability": "mineminenomi:rokuogan"
       }
     }
   ]

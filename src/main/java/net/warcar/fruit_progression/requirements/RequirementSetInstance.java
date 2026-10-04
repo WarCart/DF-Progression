@@ -6,6 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class RequirementSetInstance {
         this.name = name;
     }
 
-    public boolean isFulfilled(LivingEntity player, AbilityCore<?> core) {
+    public boolean isFulfilled(LivingEntity player, @Nullable AbilityCore<?> core) {
         List<List<RequirementInstance>> reqsSquared = this.reqs;
         boolean stoppedOuter = false;
         if (reqsSquared != null) {

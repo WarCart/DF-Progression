@@ -3,9 +3,12 @@ package net.warcar.fruit_progression.requirements;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import net.warcar.fruit_progression.init.ModRegistries;
+import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 
 public class RequirementInstance {
@@ -46,6 +49,10 @@ public class RequirementInstance {
         this.debug = debug;
     }
 
+    public boolean isFulfilled(LivingEntity player, @Nullable AbilityCore<?> core) {
+        return this.core.requirementMet(player, core, this);
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -61,7 +68,7 @@ public class RequirementInstance {
         return builder.toString();
     }
 
-    static RequirementInstance deserialize(JsonElement json) {
+    public static RequirementInstance deserialize(JsonElement json) {
         JsonObject object = json.getAsJsonObject();
         String name = object.get("name").getAsString();
         boolean debug = false;

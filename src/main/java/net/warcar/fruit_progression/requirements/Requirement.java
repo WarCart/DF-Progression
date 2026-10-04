@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import net.minecraft.world.entity.LivingEntity;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 
+import javax.annotation.Nullable;
+
 public abstract class Requirement {
     private final Class<?>[] requiredVals;
     protected Class<?>[] optionalVals = new Class[0];
@@ -12,7 +14,7 @@ public abstract class Requirement {
         this.requiredVals = requiredVals;
     }
 
-    public abstract boolean requirementMet(LivingEntity entity, AbilityCore<?> core, RequirementInstance instance);
+    public abstract boolean requirementMet(LivingEntity entity, @Nullable AbilityCore<?> core, RequirementInstance instance);
 
     public abstract RequirementInstance deserializeInstance(JsonObject json);
 
