@@ -74,7 +74,7 @@
     {
       "action": "ability_progression:unlock_ability",
       "args": {
-        "ability": "mineminenomi:soru"
+        "ability": "mineminenomi:kamie"
       }
     }
   ]

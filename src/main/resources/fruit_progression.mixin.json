@@ -4,10 +4,12 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "fruit_progression.refmap.json",
   "mixins": [
+    "AbilityCoreMixin",
     "AbilityDataMixin",
     "AbilityNodeMixin",
     "ContinuousComponentMixin",
-    "DevilFruitDataMixin"
+    "DevilFruitDataMixin",
+    "IAbilityDataMixin"
   ],
   "client": [
     "client.AbilityTreeMixin"

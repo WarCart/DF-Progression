@@ -46,6 +46,7 @@ public class AbilityNodeLink {
         AbilityNode node;
         try {
             node = link.create();
+            ((INodeMixin) node).ability_progression$setResourceLocation(location);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

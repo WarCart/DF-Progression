@@ -9,11 +9,13 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraftforge.registries.NewRegistryEvent;
 import net.minecraftforge.registries.RegistryBuilder;
-import net.warcar.fruit_progression.data.entity.abilities_addition.SSyncAdditionalDataPacket;
 import net.warcar.fruit_progression.init.ModActions;
 import net.warcar.fruit_progression.init.ModDataReaders;
 import net.warcar.fruit_progression.init.ModRegistries;
 import net.warcar.fruit_progression.init.ModRequirements;
+import net.warcar.fruit_progression.network.CUnlockAbilityNodePacket;
+import net.warcar.fruit_progression.network.SSyncAdditionalDataPacket;
+import net.warcar.fruit_progression.network.SUnlockAbilityNodePacket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,6 +34,8 @@ public class DevilFruitProgressionMod {
         ModRequirements.register(bus);
         ModActions.register(bus);
         INSTANCE.registerMessage(0, SSyncAdditionalDataPacket.class, SSyncAdditionalDataPacket::encode, SSyncAdditionalDataPacket::decode, SSyncAdditionalDataPacket::handle);
+        INSTANCE.registerMessage(1, CUnlockAbilityNodePacket.class, CUnlockAbilityNodePacket::encode, CUnlockAbilityNodePacket::decode, CUnlockAbilityNodePacket::handle);
+        INSTANCE.registerMessage(2, SUnlockAbilityNodePacket.class, SUnlockAbilityNodePacket::encode, SUnlockAbilityNodePacket::decode, SUnlockAbilityNodePacket::handle);
         MinecraftForge.EVENT_BUS.register(this);
     }
 

@@ -1,4 +1,4 @@
-package net.warcar.fruit_progression.data.entity.abilities_addition;
+package net.warcar.fruit_progression.network;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
@@ -9,6 +9,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
+import net.warcar.fruit_progression.data.entity.abilities_addition.AbilityAdditionDataCapability;
+import net.warcar.fruit_progression.data.entity.abilities_addition.IAbilityAdditionData;
 
 import java.util.Optional;
 import java.util.function.Supplier;
