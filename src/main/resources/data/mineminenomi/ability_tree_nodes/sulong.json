@@ -1,0 +1,45 @@
+{
+  "requirements": [
+    [
+      {
+        "name": "ability_progression:doriki",
+        "args": {
+          "doriki": 1200
+        }
+      },
+      {
+        "name": "ability_progression:race",
+        "args": {
+          "race": "mineminenomi:mink"
+        }
+      }
+    ]
+  ],
+  "pos": {
+    "x": 7.0,
+    "y": 6.0
+  },
+  "prerequisites": [
+    "mineminenomi:eleclaw"
+  ],
+  "visible_if": {
+    "name": "ability_progression:race",
+    "args": {
+      "race": "mineminenomi:mink"
+    }
+  },
+  "on_unlocked": [
+    {
+      "action": "ability_progression:unlock_ability",
+      "args": {
+        "ability": "mineminenomi:sulong"
+      }
+    },
+    {
+      "action": "ability_progression:unlock_ability",
+      "args": {
+        "ability": "mineminenomi:sulong_check"
+      }
+    }
+  ]
+}

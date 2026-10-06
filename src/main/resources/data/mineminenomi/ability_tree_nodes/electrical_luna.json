@@ -4,19 +4,19 @@
       {
         "name": "ability_progression:doriki",
         "args": {
-          "doriki": 3000
+          "doriki": 3600
         }
       },
       {
         "name": "ability_progression:race",
         "args": {
-          "race": "mineminenomi:human"
+          "race": "mineminenomi:mink"
         }
       },
       {
         "name": "ability_progression:training_points",
         "args": {
-          "points": 5,
+          "points": 10,
           "type": "MARTIAL_ARTS"
         }
       }
@@ -25,33 +25,36 @@
       {
         "name": "ability_progression:doriki",
         "args": {
-          "doriki": 3000
+          "doriki": 3600
         }
       },
       {
         "name": "ability_progression:training_points",
         "args": {
-          "points": 8,
+          "points": 15,
           "type": "MARTIAL_ARTS"
         }
       }
     ]
   ],
   "pos": {
-    "x": 6.0,
-    "y": 2.0
+    "x": 11.0,
+    "y": 7.0
   },
+  "prerequisites": [
+    "mineminenomi:electrical_missile"
+  ],
   "on_unlocked": [
     {
       "action": "ability_progression:remove_points",
       "only_if": {
         "name": "ability_progression:race",
         "args": {
-          "race": "mineminenomi:human"
+          "race": "mineminenomi:mink"
         }
       },
       "args": {
-        "points": 5,
+        "points": 10,
         "type": "MARTIAL_ARTS"
       }
     },
@@ -60,18 +63,18 @@
       "only_if": {
         "name": "!ability_progression:race",
         "args": {
-          "race": "mineminenomi:human"
+          "race": "mineminenomi:mink"
         }
       },
       "args": {
-        "points": 8,
+        "points": 15,
         "type": "MARTIAL_ARTS"
       }
     },
     {
       "action": "ability_progression:unlock_ability",
       "args": {
-        "ability": "mineminenomi:shigan"
+        "ability": "mineminenomi:electrical_luna"
       }
     }
   ]

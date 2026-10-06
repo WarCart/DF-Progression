@@ -25,7 +25,7 @@
       {
         "name": "ability_progression:doriki",
         "args": {
-          "doriki": 500
+          "doriki": 1000
         }
       },
       {
@@ -37,9 +37,6 @@
       }
     ]
   ],
-  "visible_if": {
-    "name": "ability_progression:always"
-  },
   "pos": {
     "x": 6.0,
     "y": -2.0

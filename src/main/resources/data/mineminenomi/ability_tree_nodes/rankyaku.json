@@ -51,9 +51,6 @@
       }
     ]
   ],
-  "visible_if": {
-    "name": "ability_progression:always"
-  },
   "pos": {
     "x": 5.0,
     "y": 0.0

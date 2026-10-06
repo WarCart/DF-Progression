@@ -30,11 +30,11 @@ public class StyleRequirement extends Requirement {
         Optional<FightingStyle> styleOptional = statsOptional.get().getFightingStyle();
         if (styleOptional.isEmpty()) {
             if (instance.isDebug()) {
-                DevilFruitProgressionMod.LOGGER.warn("Entity {} has no style", entity);
+                DevilFruitProgressionMod.LOGGER.warn("Entity {} has no fighting style", entity);
             }
             return false;
         }
-        String style = styleOptional.get().toString();
+        String style = styleOptional.get().getRegistryName().toString();
         String required = instance.getValues()[0];
         if (instance.isDebug()) {
             DevilFruitProgressionMod.LOGGER.info("style: {}", style);

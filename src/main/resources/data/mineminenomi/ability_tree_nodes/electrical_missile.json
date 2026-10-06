@@ -4,13 +4,13 @@
       {
         "name": "ability_progression:doriki",
         "args": {
-          "doriki": 3000
+          "doriki": 800
         }
       },
       {
         "name": "ability_progression:race",
         "args": {
-          "race": "mineminenomi:human"
+          "race": "mineminenomi:mink"
         }
       },
       {
@@ -25,7 +25,7 @@
       {
         "name": "ability_progression:doriki",
         "args": {
-          "doriki": 3000
+          "doriki": 800
         }
       },
       {
@@ -38,16 +38,19 @@
     ]
   ],
   "pos": {
-    "x": 6.0,
-    "y": 2.0
+    "x": 9.0,
+    "y": 8.0
   },
+  "prerequisites": [
+    "mineminenomi:eleclaw"
+  ],
   "on_unlocked": [
     {
       "action": "ability_progression:remove_points",
       "only_if": {
         "name": "ability_progression:race",
         "args": {
-          "race": "mineminenomi:human"
+          "race": "mineminenomi:mink"
         }
       },
       "args": {
@@ -60,7 +63,7 @@
       "only_if": {
         "name": "!ability_progression:race",
         "args": {
-          "race": "mineminenomi:human"
+          "race": "mineminenomi:mink"
         }
       },
       "args": {
@@ -71,7 +74,7 @@
     {
       "action": "ability_progression:unlock_ability",
       "args": {
-        "ability": "mineminenomi:shigan"
+        "ability": "mineminenomi:electrical_missile"
       }
     }
   ]

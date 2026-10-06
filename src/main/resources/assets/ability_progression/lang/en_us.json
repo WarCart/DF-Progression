@@ -1,4 +1,15 @@
 {
-  "ability_node.mineminenomi.devil_fruit_points_check": "Devil Fruit Points: %d",
-  "gui.mineminenomi.needs_ability_unlocked": "Needs unlocked ability: %s"
+	"ability_node.ability_progression.devil_fruit_points_check": "Devil Fruit Points: %d",
+
+	"gui.ability_progression.needs_ability_unlocked": "Needs unlocked ability: %s",
+	"gui.ability_progression.needs_awakening": "Needs awakened devil fruit",
+	"gui.ability_progression.needs_df": "Needs devil fruit: %s",
+	"gui.ability_progression.needs_df_mastery": "Needs devil fruit mastery: %d",
+	"gui.ability_progression.needs_finished_quest": "Needs finished quest: %s",
+	"gui.ability_progression.needs_hakixp.buso": "Needs busoshoku Haki XP: %d",
+	"gui.ability_progression.needs_hakixp.kenb": "Needs kenbunshoku Haki XP: %d",
+	"gui.ability_progression.needs_hakixp.total": "Needs total Haki XP: %d",
+	"gui.ability_progression.needs_haoshoku": "Needs to be able to develop Haoshoku haki",
+	"gui.ability_progression.needs_loyalty": "Needs loyalty: %d",
+	"gui.ability_progression.needs_used_ability": "Needs to use %s %d times"
 }
