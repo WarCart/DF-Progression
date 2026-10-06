@@ -4,7 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-import net.warcar.fruit_progression.DevilFruitProgressionMod;
+import net.warcar.fruit_progression.init.ModDataReaders;
 import net.warcar.fruit_progression.nodes.AbilityNodeLink;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,13 +27,14 @@ import java.util.Set;
 
 @Mixin(AbilityDataBase.class)
 public abstract class AbilityDataMixin implements IAbilityData {
+
     @Unique
     private final Map<ResourceLocation, AbilityNode> ability_progression$serialNodes = new HashMap<>();
 
     @Shadow
     private LivingEntity owner;
 
-    @ModifyVariable(method = "deserializeNBT(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("STORE"), remap = false)
+    @ModifyVariable(method = "deserializeNBT(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "STORE"), remap = false, name = "nodesTag")
     private ListTag modifyNodesTag(ListTag nodesTag) {
         for (int i = 0; i < nodesTag.size(); ++i) {
             CompoundTag nodeTag = nodesTag.getCompound(i);
@@ -46,7 +47,7 @@ public abstract class AbilityDataMixin implements IAbilityData {
 
             ResourceLocation location = ResourceLocation.parse(coreId);
 
-            if (DevilFruitProgressionMod.ABILITY_TREE_READER.contains(location)) {
+            if (ModDataReaders.ABILITY_TREE_READER.contains(location)) {
                 node = AbilityNodeLink.resolve(location);
 
                 if (node == null) {
@@ -75,7 +76,7 @@ public abstract class AbilityDataMixin implements IAbilityData {
             }
         }
 
-        for (ResourceLocation loc : DevilFruitProgressionMod.ABILITY_TREE_READER.keys()) {
+        for (ResourceLocation loc : ModDataReaders.ABILITY_TREE_READER.keys()) {
             if (this.ability_progression$serialNodes.containsKey(loc)) {
                 continue;
             }

@@ -2,11 +2,13 @@ package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
+import net.warcar.fruit_progression.init.ModRequirements;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 
 import javax.annotation.Nullable;
@@ -70,36 +72,36 @@ public class RequirementSetInstance {
     public static RequirementSetInstance getRequirementSetInstance(JsonElement jsonElement, ResourceLocation location) {
         try {
             if (jsonElement.isJsonObject()) {
-                List<List<RequirementInstance>> list = getListOfLists(jsonElement.getAsJsonObject().getAsJsonArray("requirements"), location);
-                boolean debug = jsonElement.getAsJsonObject().has("debug") && jsonElement.getAsJsonObject().get("debug").getAsBoolean();
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                if (jsonObject.get("requirements").isJsonPrimitive()) {
+                    return ofOnly(ModRequirements.SAVED.get().simpleInstance(jsonObject.get("requirements").getAsString()), location.toString());
+                }
+                List<List<RequirementInstance>> list = getListOfLists(jsonObject.getAsJsonArray("requirements"));
+                boolean debug = jsonObject.has("debug") && jsonObject.get("debug").getAsBoolean();
                 RequirementSetInstance reqs = new RequirementSetInstance(list, location.toString());
                 if (debug) {
                     DevilFruitProgressionMod.LOGGER.debug(reqs);
                 }
                 return reqs;
-            } else {
-                List<List<RequirementInstance>> list = getListOfLists(jsonElement.getAsJsonArray(), location);
+            } else if (jsonElement.isJsonArray()) {
+                List<List<RequirementInstance>> list = getListOfLists(jsonElement.getAsJsonArray());
                 return new RequirementSetInstance(list, location.toString());
             }
         } catch (Exception e) {
+            DevilFruitProgressionMod.LOGGER.warn("Error while trying to process ability data {}", location);
             e.printStackTrace();
-            return UNFINISHABLE;
         }
+        return UNFINISHABLE;
     }
 
-    public static List<List<RequirementInstance>> getListOfLists(JsonArray jsonElement, ResourceLocation location) {
+    public static List<List<RequirementInstance>> getListOfLists(JsonArray jsonElement) {
         List<List<RequirementInstance>> list = new ArrayList<>();
         for (JsonElement jsonArr : jsonElement) {
             List<RequirementInstance> innerList = new ArrayList<>();
             for (JsonElement json : jsonArr.getAsJsonArray()) {
-                try {
-                    RequirementInstance instance = RequirementInstance.deserialize(json);
-                    if (instance != null) {
-                        innerList.add(instance);
-                    }
-                } catch (Exception e) {
-                    DevilFruitProgressionMod.LOGGER.warn("Error while trying to process ability data {}", location);
-                    e.printStackTrace();
+                RequirementInstance instance = RequirementInstance.deserialize(json);
+                if (instance != null) {
+                    innerList.add(instance);
                 }
             }
             if (!innerList.isEmpty()) {
@@ -125,5 +127,10 @@ public class RequirementSetInstance {
             }
         }
         return output;
+    }
+
+    public static RequirementSetInstance ofOnly(RequirementInstance instance, String name) {
+        DevilFruitProgressionMod.LOGGER.info(instance.toString());
+        return new RequirementSetInstance(List.of(List.of(instance)), name);
     }
 }

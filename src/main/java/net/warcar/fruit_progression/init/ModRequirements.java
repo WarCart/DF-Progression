@@ -2,6 +2,7 @@ package net.warcar.fruit_progression.init;
 
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import net.warcar.fruit_progression.requirements.*;
 import xyz.pixelatedw.mineminenomi.api.enums.TrainingPointType;
@@ -9,9 +10,10 @@ import xyz.pixelatedw.mineminenomi.api.enums.TrainingPointType;
 public class ModRequirements {
     public static final DeferredRegister<Requirement> REQUIREMENTS_REGISTER = DeferredRegister.create(ModRegistries.REQUIREMENTS_KEY, DevilFruitProgressionMod.MOD_ID);
     public static final TrainingPointType DEVIL_FRUIT_POINTS = TrainingPointType.create("DEVIL_FRUIT");
+    public static final RegistryObject<SavedRequirement> SAVED = registerRequirement(new SavedRequirement(), "saved");
 
-    private static <T extends Requirement> void registerRequirement(T requirement, String resourceName) {
-        REQUIREMENTS_REGISTER.register(resourceName, () -> requirement);
+    private static <T extends Requirement> RegistryObject<T> registerRequirement(T requirement, String resourceName) {
+        return REQUIREMENTS_REGISTER.register(resourceName, () -> requirement);
     }
     public static void register(IEventBus bus) {
         REQUIREMENTS_REGISTER.register(bus);
@@ -33,6 +35,5 @@ public class ModRequirements {
         registerRequirement(new LoyaltyRequirement(), "loyalty");
         registerRequirement(new UsedAbilityRequirement(), "ability_used");
         registerRequirement(new TrainingPointsRequirement(), "training_points");
-        registerRequirement(new SavedRequirement(), "saved");
     }
 }

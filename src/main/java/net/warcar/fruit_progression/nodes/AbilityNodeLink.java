@@ -7,8 +7,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import net.warcar.fruit_progression.data.mixin_interfaces.INodeMixin;
+import net.warcar.fruit_progression.init.ModDataReaders;
 import net.warcar.fruit_progression.requirements.RequirementInstance;
 import net.warcar.fruit_progression.requirements.RequirementSetInstance;
 import xyz.pixelatedw.mineminenomi.api.abilities.nodes.AbilityNode;
@@ -42,7 +42,7 @@ public class AbilityNodeLink {
         if (RESOLVED.containsKey(location)) {
             return RESOLVED.get(location);
         }
-        AbilityNodeLink link = DevilFruitProgressionMod.ABILITY_TREE_READER.get(location);
+        AbilityNodeLink link = ModDataReaders.ABILITY_TREE_READER.get(location);
         AbilityNode node;
         try {
             node = link.create();

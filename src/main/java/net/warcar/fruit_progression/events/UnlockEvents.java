@@ -14,6 +14,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import net.warcar.fruit_progression.data.entity.abilities_addition.AbilityAdditionDataCapability;
 import net.warcar.fruit_progression.data.entity.abilities_addition.SSyncAdditionalDataPacket;
+import net.warcar.fruit_progression.init.ModDataReaders;
 import net.warcar.fruit_progression.new_data_reader.RequirementModifiersPile;
 import net.warcar.fruit_progression.requirements.RequirementSetInstance;
 import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
@@ -33,8 +34,8 @@ public class UnlockEvents {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onUnlock(UnlockAbilityEvent event) {
         ResourceLocation location = event.getAbilityCore().getRegistryKey();
-        if (location != null && DevilFruitProgressionMod.ABILITIES_READER.contains(location)) {
-            RequirementSetInstance instance = DevilFruitProgressionMod.ABILITIES_READER.get(location).requirementSetInstance();
+        if (location != null && ModDataReaders.ABILITIES_READER.contains(location)) {
+            RequirementSetInstance instance = ModDataReaders.ABILITIES_READER.get(location).requirementSetInstance();
             if (instance != null) {
                 if (instance.isFulfilled(event.getEntity(), event.getAbilityCore())) {
                     event.setResult(Event.Result.ALLOW);
@@ -74,7 +75,7 @@ public class UnlockEvents {
 
     private static void checkForAwakening(LivingEntity player) {
         DevilFruitCapability.get(player).ifPresent(props -> props.getDevilFruit().ifPresent(fruit -> {
-            RequirementSetInstance instance = DevilFruitProgressionMod.AWAKENINGS_READER.get(fruit);
+            RequirementSetInstance instance = ModDataReaders.AWAKENINGS_READER.get(fruit);
             if (instance != null) {
                 if (props.hasAwakenedFruit() != instance.isFulfilled(player, null)) {
                     props.setAwakenedFruit(instance.isFulfilled(player, null));
@@ -104,8 +105,8 @@ public class UnlockEvents {
     public static void onAbilityEquipped(EquipAbilityEvent event) {
         IAbility ability = event.getAbility();
         ResourceLocation name = ability.getCore().getRegistryKey();
-        if (name != null && DevilFruitProgressionMod.ABILITIES_READER.contains(name)) {
-            RequirementModifiersPile pile = DevilFruitProgressionMod.ABILITIES_READER.get(name);
+        if (name != null && ModDataReaders.ABILITIES_READER.contains(name)) {
+            RequirementModifiersPile pile = ModDataReaders.ABILITIES_READER.get(name);
             pile.apply(ability);
         }
     }

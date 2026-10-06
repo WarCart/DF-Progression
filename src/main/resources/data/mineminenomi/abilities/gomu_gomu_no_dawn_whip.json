@@ -1,12 +1,3 @@
 {
-  "requirements": [
-    [
-      {
-        "name": "ability_progression:saved",
-        "args": {
-          "requirement": "mineminenomi:awakened_gomu"
-        }
-      }
-    ]
-  ]
+  "requirements": "mineminenomi:awakened_gomu"
 }
