@@ -1,6 +1,8 @@
 package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonObject;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 
@@ -24,5 +26,9 @@ public abstract class Requirement {
 
     public Class<?>[] getOptionalVals() {
         return optionalVals;
+    }
+
+    public MutableComponent getTooltip(RequirementInstance instance) {
+        return Component.empty();
     }
 }

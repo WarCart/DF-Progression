@@ -4,7 +4,7 @@
       {
         "name": "ability_progression:doriki",
         "args": {
-          "doriki": 9000
+          "doriki": 5000
         }
       },
       {
@@ -16,8 +16,15 @@
       {
         "name": "ability_progression:training_points",
         "args": {
-          "points": 10,
+          "points": 1,
           "type": "MARTIAL_ARTS"
+        }
+      },
+      {
+        "name": "ability_progression:training_points",
+        "args": {
+          "points": 4,
+          "type": "ACCURACY"
         }
       }
     ],
@@ -25,14 +32,21 @@
       {
         "name": "ability_progression:doriki",
         "args": {
-          "doriki": 9000
+          "doriki": 5000
         }
       },
       {
         "name": "ability_progression:training_points",
         "args": {
-          "points": 15,
+          "points": 2,
           "type": "MARTIAL_ARTS"
+        }
+      },
+      {
+        "name": "ability_progression:training_points",
+        "args": {
+          "points": 6,
+          "type": "ACCURACY"
         }
       }
     ]
@@ -41,17 +55,9 @@
     "name": "ability_progression:always"
   },
   "pos": {
-    "x": 7.0,
+    "x": 5.0,
     "y": 0.0
   },
-  "prerequisites": [
-    "mineminenomi:geppo",
-    "mineminenomi:tekkai",
-    "mineminenomi:rankyaku",
-    "mineminenomi:soru",
-    "mineminenomi:shigan",
-    "mineminenomi:kamie"
-  ],
   "on_unlocked": [
     {
       "action": "ability_progression:remove_points",
@@ -62,7 +68,33 @@
         }
       },
       "args": {
-        "points": 10,
+        "points": 1,
+        "type": "MARTIAL_ARTS"
+      }
+    },
+    {
+      "action": "ability_progression:remove_points",
+      "only_if": {
+        "name": "ability_progression:race",
+        "args": {
+          "race": "mineminenomi:human"
+        }
+      },
+      "args": {
+        "points": 4,
+        "type": "ACCURACY"
+      }
+    },
+    {
+      "action": "ability_progression:remove_points",
+      "only_if": {
+        "name": "!ability_progression:race",
+        "args": {
+          "race": "mineminenomi:human"
+        }
+      },
+      "args": {
+        "points": 2,
         "type": "MARTIAL_ARTS"
       }
     },
@@ -75,14 +107,14 @@
         }
       },
       "args": {
-        "points": 15,
-        "type": "MARTIAL_ARTS"
+        "points": 6,
+        "type": "ACCURACY"
       }
     },
     {
       "action": "ability_progression:unlock_ability",
       "args": {
-        "ability": "mineminenomi:rokuogan"
+        "ability": "mineminenomi:rankyaku"
       }
     }
   ]

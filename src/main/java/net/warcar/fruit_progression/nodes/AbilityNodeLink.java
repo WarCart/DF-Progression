@@ -4,12 +4,16 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import net.warcar.fruit_progression.data.mixin_interfaces.INodeMixin;
 import net.warcar.fruit_progression.requirements.RequirementInstance;
 import net.warcar.fruit_progression.requirements.RequirementSetInstance;
 import xyz.pixelatedw.mineminenomi.api.abilities.nodes.AbilityNode;
+import xyz.pixelatedw.mineminenomi.api.abilities.nodes.actions.NodeUnlockAction;
+import xyz.pixelatedw.mineminenomi.api.abilities.nodes.conditions.NodeUnlockCondition;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,11 +26,15 @@ public class AbilityNodeLink {
     private RequirementInstance visibleIf = null;
     private RequirementSetInstance requirementSet;
     private ResourceLocation[] prerequisites = {};
+    private NodeUnlockAction onUnlock;
 
     public AbilityNode create() {
         AbilityNode node = new AbilityNode(this.localizedName, this.icon, this.location);
         ((INodeMixin) node).ability_progression$setRequirement(this.visibleIf);
-        //TODO: merge requirement set
+        if (this.prerequisites.length > 0) {
+            node.addPrerequisites(this.resolveDependencies());
+        }
+        node.setUnlockRule(new SetCondition(this.requirementSet), this.onUnlock);
         return node;
     }
 
@@ -35,9 +43,23 @@ public class AbilityNodeLink {
             return RESOLVED.get(location);
         }
         AbilityNodeLink link = DevilFruitProgressionMod.ABILITY_TREE_READER.get(location);
-        AbilityNode node = link.create();
+        AbilityNode node;
+        try {
+            node = link.create();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
         RESOLVED.put(location, node);
         return node;
+    }
+
+    private AbilityNode[] resolveDependencies() {
+        AbilityNode[] out = new AbilityNode[this.prerequisites.length];
+        for (int i = 0; i < out.length; i++) {
+            out[i] = resolve(this.prerequisites[i]);
+        }
+        return out;
     }
 
     public static AbilityNodeLink deserializeFromJson(JsonElement json, ResourceLocation location) {
@@ -47,9 +69,9 @@ public class AbilityNodeLink {
         JsonObject main = json.getAsJsonObject();
         AbilityNodeLink link = new AbilityNodeLink();
         if (main.has("icon")) {
-            link.icon = ResourceLocation.parse(main.get("icon").getAsString());
+            link.icon = ResourceLocation.parse(main.get("icon").getAsString() + ".png");
         } else {
-            link.icon = location;
+            link.icon = ResourceLocation.fromNamespaceAndPath(location.getNamespace(), "textures/abilities/" + location.getPath() + ".png");
         }
         if (main.has("display_name")) {
             link.localizedName = Component.translatable(main.get("display_name").getAsString());
@@ -69,7 +91,38 @@ public class AbilityNodeLink {
             link.visibleIf = RequirementInstance.deserialize(main.get("visible_if"));
         }
         link.requirementSet = RequirementSetInstance.getRequirementSetInstance(main.get("requirements"), location);
-        //TODO: on_unlocked
+        JsonArray onUnlock = main.getAsJsonArray("on_unlocked");
+        NodeUnlockInstance[] onUnlocked = new NodeUnlockInstance[onUnlock.size()];
+        for (int i = 0; i < onUnlock.size(); i++) {
+            onUnlocked[i] = NodeUnlockInstance.deserialize(onUnlock.get(i));
+        }
+        link.onUnlock = bakeUnlocked(onUnlocked);
         return link;
+    }
+
+    private static NodeUnlockAction bakeUnlocked(NodeUnlockInstance[] onUnlocked) {
+        NodeUnlockAction out = onUnlocked[0].convert();
+        for (int i = 1; i < onUnlocked.length; i++) {
+            out = out.andThen(onUnlocked[i].convert());
+        }
+        return out;
+    }
+
+    private static class SetCondition implements NodeUnlockCondition {
+        RequirementSetInstance instance;
+
+        public SetCondition(RequirementSetInstance instance) {
+            this.instance = instance;
+        }
+
+        @Override
+        public boolean test(LivingEntity livingEntity) {
+            return instance.isFulfilled(livingEntity, null);
+        }
+
+        @Override
+        public MutableComponent getTooltip() {
+            return instance.getTooltip();
+        }
     }
 }

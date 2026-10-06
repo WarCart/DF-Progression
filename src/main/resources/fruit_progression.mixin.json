@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "fruit_progression.refmap.json",
   "mixins": [
+    "AbilityDataMixin",
     "AbilityNodeMixin",
     "ContinuousComponentMixin",
     "DevilFruitDataMixin"

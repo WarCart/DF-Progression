@@ -2,6 +2,7 @@ package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
@@ -12,6 +13,7 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 
 public class RequirementInstance {
+    public static final RequirementInstance ALWAYS_TRUE = new AlwaysTrueRequirement().deserializeInstance(null);
     private final Requirement core;
     private String[] args = {};
     private boolean inverted;
@@ -50,6 +52,9 @@ public class RequirementInstance {
     }
 
     public boolean isFulfilled(LivingEntity player, @Nullable AbilityCore<?> core) {
+        if (this.inverted) {
+            return !this.core.requirementMet(player, core, this);
+        }
         return this.core.requirementMet(player, core, this);
     }
 
@@ -80,6 +85,7 @@ public class RequirementInstance {
         if (name.startsWith("!")) {
             inverted = true;
             name = name.substring(1);
+            DevilFruitProgressionMod.LOGGER.info("inverted {}", name);
         }
         JsonObject args;
         if (object.has("args")) {
@@ -96,5 +102,9 @@ public class RequirementInstance {
         instance.setDebug(debug);
         instance.setInverted(inverted);
         return instance;
+    }
+
+    public MutableComponent getTooltip() {
+        return this.core.getTooltip(this);
     }
 }

@@ -12,6 +12,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraftforge.registries.NewRegistryEvent;
 import net.minecraftforge.registries.RegistryBuilder;
 import net.warcar.fruit_progression.data.entity.abilities_addition.SSyncAdditionalDataPacket;
+import net.warcar.fruit_progression.init.ModActions;
 import net.warcar.fruit_progression.init.ModRegistries;
 import net.warcar.fruit_progression.init.ModRequirements;
 import net.warcar.fruit_progression.new_data_reader.AbilityDataReader;
@@ -38,12 +39,14 @@ public class DevilFruitProgressionMod {
         IEventBus bus = context.getModEventBus();
         bus.addListener(this::registerNewRegistries);
         ModRequirements.register(bus);
+        ModActions.register(bus);
         INSTANCE.registerMessage(0, SSyncAdditionalDataPacket.class, SSyncAdditionalDataPacket::encode, SSyncAdditionalDataPacket::decode, SSyncAdditionalDataPacket::handle);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     private void registerNewRegistries(NewRegistryEvent event) {
         event.create(new RegistryBuilder<>().setName(ModRegistries.REQUIREMENTS_KEY.location()));
+        event.create(new RegistryBuilder<>().setName(ModRegistries.ACTIONS_KEY.location()));
     }
 
     @Mod.EventBusSubscriber(modid = MOD_ID)

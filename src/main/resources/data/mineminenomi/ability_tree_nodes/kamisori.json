@@ -4,7 +4,7 @@
       {
         "name": "ability_progression:doriki",
         "args": {
-          "doriki": 9000
+          "doriki": 1750
         }
       },
       {
@@ -16,7 +16,7 @@
       {
         "name": "ability_progression:training_points",
         "args": {
-          "points": 10,
+          "points": 3,
           "type": "MARTIAL_ARTS"
         }
       }
@@ -25,32 +25,25 @@
       {
         "name": "ability_progression:doriki",
         "args": {
-          "doriki": 9000
+          "doriki": 1750
         }
       },
       {
         "name": "ability_progression:training_points",
         "args": {
-          "points": 15,
+          "points": 5,
           "type": "MARTIAL_ARTS"
         }
       }
     ]
   ],
-  "visible_if": {
-    "name": "ability_progression:always"
-  },
   "pos": {
-    "x": 7.0,
-    "y": 0.0
+    "x": 10.0,
+    "y": -2.0
   },
   "prerequisites": [
     "mineminenomi:geppo",
-    "mineminenomi:tekkai",
-    "mineminenomi:rankyaku",
-    "mineminenomi:soru",
-    "mineminenomi:shigan",
-    "mineminenomi:kamie"
+    "mineminenomi:soru"
   ],
   "on_unlocked": [
     {
@@ -62,7 +55,7 @@
         }
       },
       "args": {
-        "points": 10,
+        "points": 3,
         "type": "MARTIAL_ARTS"
       }
     },
@@ -75,14 +68,14 @@
         }
       },
       "args": {
-        "points": 15,
+        "points": 5,
         "type": "MARTIAL_ARTS"
       }
     },
     {
       "action": "ability_progression:unlock_ability",
       "args": {
-        "ability": "mineminenomi:rokuogan"
+        "ability": "mineminenomi:kamisori"
       }
     }
   ]

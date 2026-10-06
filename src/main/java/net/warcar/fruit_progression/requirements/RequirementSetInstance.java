@@ -1,6 +1,9 @@
 package net.warcar.fruit_progression.requirements;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
@@ -32,10 +35,7 @@ public class RequirementSetInstance {
             for (List<RequirementInstance> requirements : reqsSquared) {
                 boolean stoppedInner = true;
                 for (RequirementInstance requirement : requirements) {
-                    boolean reqOutput = requirement.getCore().requirementMet(player, core, requirement);
-                    if (requirement.isInverted()) {
-                        reqOutput = !reqOutput;
-                    }
+                    boolean reqOutput = requirement.isFulfilled(player, core);
                     if (!reqOutput) {
                         stoppedInner = false;
                         break;
@@ -69,22 +69,27 @@ public class RequirementSetInstance {
 
     public static RequirementSetInstance getRequirementSetInstance(JsonElement jsonElement, ResourceLocation location) {
         try {
-            List<List<RequirementInstance>> list = getListOfLists(jsonElement, location);
-            boolean debug = jsonElement.getAsJsonObject().has("debug") && jsonElement.getAsJsonObject().get("debug").getAsBoolean();
-            RequirementSetInstance reqs = new RequirementSetInstance(list, location.toString());
-            if (debug) {
-                DevilFruitProgressionMod.LOGGER.debug(reqs);
+            if (jsonElement.isJsonObject()) {
+                List<List<RequirementInstance>> list = getListOfLists(jsonElement.getAsJsonObject().getAsJsonArray("requirements"), location);
+                boolean debug = jsonElement.getAsJsonObject().has("debug") && jsonElement.getAsJsonObject().get("debug").getAsBoolean();
+                RequirementSetInstance reqs = new RequirementSetInstance(list, location.toString());
+                if (debug) {
+                    DevilFruitProgressionMod.LOGGER.debug(reqs);
+                }
+                return reqs;
+            } else {
+                List<List<RequirementInstance>> list = getListOfLists(jsonElement.getAsJsonArray(), location);
+                return new RequirementSetInstance(list, location.toString());
             }
-            return reqs;
         } catch (Exception e) {
             e.printStackTrace();
             return UNFINISHABLE;
         }
     }
 
-    public static List<List<RequirementInstance>> getListOfLists(JsonElement jsonElement, ResourceLocation location) {
+    public static List<List<RequirementInstance>> getListOfLists(JsonArray jsonElement, ResourceLocation location) {
         List<List<RequirementInstance>> list = new ArrayList<>();
-        for (JsonElement jsonArr : jsonElement.getAsJsonObject().get("requirements").getAsJsonArray()) {
+        for (JsonElement jsonArr : jsonElement) {
             List<RequirementInstance> innerList = new ArrayList<>();
             for (JsonElement json : jsonArr.getAsJsonArray()) {
                 try {
@@ -104,4 +109,21 @@ public class RequirementSetInstance {
         return list;
     }
 
+    public MutableComponent getTooltip() {
+        MutableComponent output = Component.empty();
+        for (int i = 0; i < this.reqs.size(); i++) {
+            List<RequirementInstance> instances = this.reqs.get(i);
+            for (int j = 0; j < instances.size(); j++) {
+                RequirementInstance instance = instances.get(j);
+                output.append(instance.getTooltip());
+                if (j < instances.size() - 1) {
+                    output.append("\n");
+                }
+            }
+            if (i < this.reqs.size() - 1) {
+                output.append("\n    Or\n");
+            }
+        }
+        return output;
+    }
 }

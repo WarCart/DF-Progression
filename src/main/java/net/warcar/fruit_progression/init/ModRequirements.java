@@ -1,17 +1,20 @@
 package net.warcar.fruit_progression.init;
 
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.DeferredRegister;
+import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import net.warcar.fruit_progression.requirements.*;
 import xyz.pixelatedw.mineminenomi.api.enums.TrainingPointType;
 
 public class ModRequirements {
+    public static final DeferredRegister<Requirement> REQUIREMENTS_REGISTER = DeferredRegister.create(ModRegistries.REQUIREMENTS_KEY, DevilFruitProgressionMod.MOD_ID);
     public static final TrainingPointType DEVIL_FRUIT_POINTS = TrainingPointType.create("DEVIL_FRUIT");
 
     private static <T extends Requirement> void registerRequirement(T requirement, String resourceName) {
-        ModRegistries.REQUIREMENTS_REGISTER.register(resourceName, () -> requirement);
+        REQUIREMENTS_REGISTER.register(resourceName, () -> requirement);
     }
     public static void register(IEventBus bus) {
-        ModRegistries.REQUIREMENTS_REGISTER.register(bus);
+        REQUIREMENTS_REGISTER.register(bus);
 
         registerRequirement(new AlwaysTrueRequirement(), "always");
         registerRequirement(new DorikiRequirement(), "doriki");

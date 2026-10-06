@@ -1,12 +1,15 @@
 package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonObject;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.config.GeneralConfig;
 import xyz.pixelatedw.mineminenomi.data.entity.stats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.stats.IEntityStats;
+import xyz.pixelatedw.mineminenomi.init.i18n.ModI18nNodes;
 
 import java.util.Optional;
 
@@ -45,9 +48,14 @@ public class DorikiRequirement extends Requirement {
         RequirementInstance instance = new RequirementInstance(this);
         String[] args = {json.get("doriki").getAsString()};
         if (json.has("percentage")) {
-            args = new String[]{json.get("doriki").getAsString(), Boolean.toString(json.get("percentage").getAsBoolean())};
+            args = new String[]{args[0], Boolean.toString(json.get("percentage").getAsBoolean())};
         }
         instance.setValues(args);
         return instance;
+    }
+
+    @Override
+    public MutableComponent getTooltip(RequirementInstance instance) {
+        return Component.translatable(ModI18nNodes.DORIKI_CHECK, instance.getValues()[0]);
     }
 }

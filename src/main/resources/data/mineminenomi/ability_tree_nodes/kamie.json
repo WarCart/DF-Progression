@@ -4,7 +4,7 @@
       {
         "name": "ability_progression:doriki",
         "args": {
-          "doriki": 9000
+          "doriki": 3600
         }
       },
       {
@@ -25,7 +25,7 @@
       {
         "name": "ability_progression:doriki",
         "args": {
-          "doriki": 9000
+          "doriki": 3600
         }
       },
       {
@@ -41,17 +41,9 @@
     "name": "ability_progression:always"
   },
   "pos": {
-    "x": 7.0,
-    "y": 0.0
+    "x": 8.0,
+    "y": 2.0
   },
-  "prerequisites": [
-    "mineminenomi:geppo",
-    "mineminenomi:tekkai",
-    "mineminenomi:rankyaku",
-    "mineminenomi:soru",
-    "mineminenomi:shigan",
-    "mineminenomi:kamie"
-  ],
   "on_unlocked": [
     {
       "action": "ability_progression:remove_points",
@@ -82,7 +74,7 @@
     {
       "action": "ability_progression:unlock_ability",
       "args": {
-        "ability": "mineminenomi:rokuogan"
+        "ability": "mineminenomi:soru"
       }
     }
   ]

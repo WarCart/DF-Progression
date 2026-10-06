@@ -10,7 +10,9 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class AbilityDataReader<T> extends SimpleJsonResourceReloadListener {
     protected final Map<ResourceLocation, T> map = new HashMap<>();
@@ -40,6 +42,10 @@ public class AbilityDataReader<T> extends SimpleJsonResourceReloadListener {
 
     public T get(ResourceLocation location) {
         return this.map.get(location);
+    }
+
+    public Set<ResourceLocation> keys() {
+        return new HashSet<>(this.map.keySet());
     }
 
     @FunctionalInterface

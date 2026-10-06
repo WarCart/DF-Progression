@@ -4,9 +4,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.requirements.RequirementInstance;
 
 public interface INodeMixin {
-    default boolean ability_progression$isVisible(LivingEntity entity) {
-        return true;
-    }
+    boolean ability_progression$isVisible(LivingEntity entity);
 
     void ability_progression$setRequirement(RequirementInstance instance);
 }
