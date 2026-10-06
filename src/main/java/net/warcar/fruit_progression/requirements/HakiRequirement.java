@@ -1,8 +1,11 @@
 package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonObject;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
+import net.warcar.fruit_progression.init.ModTexts;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.api.enums.HakiType;
 import xyz.pixelatedw.mineminenomi.data.entity.haki.HakiCapability;
@@ -54,5 +57,16 @@ public class HakiRequirement extends Requirement {
         }
         instance.setValues(args);
         return instance;
+    }
+
+    @Override
+    public MutableComponent getTooltip(RequirementInstance instance) {
+        HakiType type = HakiType.valueOf(instance.getValues()[1]);
+        String key = switch (type) {
+            case BUSOSHOKU -> ModTexts.NEEDS_BUSO_HAKIXP;
+            case KENBUNSHOKU -> ModTexts.NEEDS_KENB_HAKIXP;
+            case HAOSHOKU -> ModTexts.NEEDS_TOTAL_HAKIXP;
+        };
+        return Component.translatable(key, instance.getValues()[0]);
     }
 }

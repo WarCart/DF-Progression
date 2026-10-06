@@ -1,9 +1,12 @@
 package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonObject;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
+import net.warcar.fruit_progression.init.ModTexts;
 import xyz.pixelatedw.mineminenomi.api.WyRegistry;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
@@ -31,5 +34,17 @@ public class AbilityUnlockedRequirement extends Requirement {
         RequirementInstance instance = new RequirementInstance(this);
         instance.setValues(json.get("ability").getAsString());
         return instance;
+    }
+
+    @Override
+    public MutableComponent getTooltip(RequirementInstance instance) {
+        AbilityCore<?> core = AbilityCore.get(ResourceLocation.parse(instance.getValues()[0]));
+        String abl;
+        if (core == null) {
+            abl = instance.getValues()[0];
+        } else {
+            abl = core.getLocalizedName().getString();
+        }
+        return Component.translatable(ModTexts.NEEDS_ABILITY, abl);
     }
 }

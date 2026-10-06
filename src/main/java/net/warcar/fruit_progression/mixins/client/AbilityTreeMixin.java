@@ -20,7 +20,7 @@ import xyz.pixelatedw.mineminenomi.ui.screens.AbilityTreeScreen;
 
 import java.util.Set;
 
-@Mixin(value = AbilityTreeScreen.class, remap = false)
+@Mixin(AbilityTreeScreen.class)
 public abstract class AbilityTreeMixin extends Screen {
     @Shadow
     private IAbilityData abilityProps;
@@ -48,7 +48,7 @@ public abstract class AbilityTreeMixin extends Screen {
         }
     }
 
-    @Inject(method = "mouseReleased", at = @At(value = "INVOKE", target = "Lxyz/pixelatedw/mineminenomi/data/entity/ability/IAbilityData;getCoreIndexPair(Lxyz/pixelatedw/mineminenomi/api/abilities/nodes/AbilityNode;)Lorg/apache/commons/lang3/tuple/Pair;"))
+    @Inject(method = "mouseReleased", at = @At(value = "INVOKE", target = "Lxyz/pixelatedw/mineminenomi/data/entity/ability/IAbilityData;getCoreIndexPair(Lxyz/pixelatedw/mineminenomi/api/abilities/nodes/AbilityNode;)Lorg/apache/commons/lang3/tuple/Pair;", remap = false))
     private void sendCustomPacket(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
         ResourceLocation location = ((INodeMixin)this.clickedNode).ability_progression$getResourceLocation();
         if (location == null) {

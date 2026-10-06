@@ -1,8 +1,14 @@
 package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonObject;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
+import net.warcar.fruit_progression.init.ModTexts;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.IDevilFruit;
@@ -40,5 +46,15 @@ public class FruitRequirement extends Requirement {
         RequirementInstance instance = new RequirementInstance(this);
         instance.setValues(json.get("fruitID").getAsString());
         return instance;
+    }
+
+    @Override
+    public MutableComponent getTooltip(RequirementInstance instance) {
+        Item df = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(instance.getValues()[0]));
+        if (df instanceof AkumaNoMiItem fruit) {
+            return Component.translatable(ModTexts.NEEDS_DF, fruit.getDevilFruitName().getString());
+        } else {
+            return Component.translatable(ModTexts.NEEDS_DF, instance.getValues()[0]);
+        }
     }
 }

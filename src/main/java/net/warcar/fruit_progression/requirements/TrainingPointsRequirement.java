@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
+import net.warcar.fruit_progression.init.ModTexts;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.api.enums.TrainingPointType;
 import xyz.pixelatedw.mineminenomi.data.entity.stats.EntityStatsCapability;
@@ -46,7 +47,7 @@ public class TrainingPointsRequirement extends Requirement {
             case "MARTIAL_ARTS" -> ModI18nNodes.MARTIAL_ARTS_POINTS_CHECK;
             case "TECHNOLOGY" -> ModI18nNodes.TECHNOLOGY_POINTS_CHECK;
             case "WEAPON_MASTERY" -> ModI18nNodes.WEAPON_MASTERY_POINTS_CHECK;
-            case "DEVIL_FRUIT" -> "";
+            case "DEVIL_FRUIT" -> ModTexts.DEVIL_FRUIT_POINTS_CHECK;
             default -> null;
         };
 

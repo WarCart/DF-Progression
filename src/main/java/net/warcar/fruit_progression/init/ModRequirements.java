@@ -26,7 +26,7 @@ public class ModRequirements {
         registerRequirement(new StyleRequirement(), "fighting_style");
         registerRequirement(new FactionRequirement(), "faction");
         registerRequirement(new FruitRequirement(), "devil_fruit");
-        registerRequirement(new SavedRequirement(), "devil_fruit_mastery");
+        registerRequirement(new DevilFruitMasteryRequirement(), "devil_fruit_mastery");
         registerRequirement(new AwakeningRequirement(), "awakening");
         registerRequirement(new QuestRequirement(), "quest");
         registerRequirement(new HaoshokuBornRequirement(), "haoshoku_born");

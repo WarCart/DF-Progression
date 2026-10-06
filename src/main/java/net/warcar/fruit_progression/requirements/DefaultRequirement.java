@@ -1,6 +1,8 @@
 package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonObject;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 
@@ -14,5 +16,10 @@ public class DefaultRequirement extends Requirement {
 
     public RequirementInstance deserializeInstance(JsonObject json) {
         return new RequirementInstance(this);
+    }
+
+    @Override
+    public MutableComponent getTooltip(RequirementInstance instance) {
+        return Component.empty();
     }
 }

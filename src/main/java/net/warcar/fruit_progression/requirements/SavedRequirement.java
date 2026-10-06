@@ -1,6 +1,8 @@
 package net.warcar.fruit_progression.requirements;
 
 import com.google.gson.JsonObject;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
@@ -27,6 +29,15 @@ public class SavedRequirement extends Requirement {
         RequirementInstance instance = new RequirementInstance(this);
         instance.setValues(json.get("requirement").getAsString());
         return instance;
+    }
+
+    @Override
+    public MutableComponent getTooltip(RequirementInstance instance) {
+        RequirementSetInstance saved = ModDataReaders.SAVED_REQUIREMENTS_READER.get(ResourceLocation.parse(instance.getValues()[0]));
+        if (saved == null) {
+            return Component.empty();
+        }
+        return saved.getTooltip();
     }
 
     public RequirementInstance simpleInstance(String id) {
