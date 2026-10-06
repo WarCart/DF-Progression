@@ -1,0 +1,66 @@
+{
+  "requirements": [
+    [
+      {
+        "name": "ability_progression:fighting_style",
+        "args": {
+          "style": "mineminenomi:brawler"
+        }
+      }
+    ],
+    [
+      {
+        "name": "ability_progression:training_points",
+        "args": {
+          "points": 2,
+          "type": "MARTIAL_ARTS"
+        }
+      },
+      {
+        "name": "ability_progression:training_points",
+        "args": {
+          "points": 1,
+          "type": "ACCURACY"
+        }
+      }
+    ]
+  ],
+  "pos": {
+    "x": -4.0,
+    "y": 5.0
+  },
+  "on_unlocked": [
+    {
+      "action": "ability_progression:remove_points",
+      "only_if": {
+        "name": "!ability_progression:fighting_style",
+        "args": {
+          "style": "mineminenomi:brawler"
+        }
+      },
+      "args": {
+        "points": 2,
+        "type": "MARTIAL_ARTS"
+      }
+    },
+    {
+      "action": "ability_progression:remove_points",
+      "only_if": {
+        "name": "!ability_progression:fighting_style",
+        "args": {
+          "style": "mineminenomi:brawler"
+        }
+      },
+      "args": {
+        "points": 1,
+        "type": "ACCURACY"
+      }
+    },
+    {
+      "action": "ability_progression:unlock_ability",
+      "args": {
+        "ability": "mineminenomi:genkotsu_meteor"
+      }
+    }
+  ]
+}

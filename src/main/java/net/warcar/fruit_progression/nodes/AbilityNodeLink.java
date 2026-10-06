@@ -15,7 +15,9 @@ import xyz.pixelatedw.mineminenomi.api.abilities.nodes.AbilityNode;
 import xyz.pixelatedw.mineminenomi.api.abilities.nodes.actions.NodeUnlockAction;
 import xyz.pixelatedw.mineminenomi.api.abilities.nodes.conditions.NodeUnlockCondition;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AbilityNodeLink {
@@ -25,27 +27,27 @@ public class AbilityNodeLink {
     private AbilityNode.NodePos location;
     private RequirementInstance visibleIf = null;
     private RequirementSetInstance requirementSet;
-    private ResourceLocation[] prerequisites = {};
+    private ConditionedLink[] prerequisites = {};
     private NodeUnlockAction onUnlock;
 
-    public AbilityNode create() {
+    public AbilityNode create(LivingEntity player) {
         AbilityNode node = new AbilityNode(this.localizedName, this.icon, this.location);
         ((INodeMixin) node).ability_progression$setRequirement(this.visibleIf);
         if (this.prerequisites.length > 0) {
-            node.addPrerequisites(this.resolveDependencies());
+            node.addPrerequisites(this.resolveDependencies(player));
         }
         node.setUnlockRule(new SetCondition(this.requirementSet), this.onUnlock);
         return node;
     }
 
-    public static AbilityNode resolve(ResourceLocation location) {
+    public static AbilityNode resolve(ResourceLocation location, LivingEntity player) {
         if (RESOLVED.containsKey(location)) {
             return RESOLVED.get(location);
         }
         AbilityNodeLink link = ModDataReaders.ABILITY_TREE_READER.get(location);
         AbilityNode node;
         try {
-            node = link.create();
+            node = link.create(player);
             ((INodeMixin) node).ability_progression$setResourceLocation(location);
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,12 +57,14 @@ public class AbilityNodeLink {
         return node;
     }
 
-    private AbilityNode[] resolveDependencies() {
-        AbilityNode[] out = new AbilityNode[this.prerequisites.length];
-        for (int i = 0; i < out.length; i++) {
-            out[i] = resolve(this.prerequisites[i]);
+    private AbilityNode[] resolveDependencies(LivingEntity player) {
+        List<AbilityNode> out = new ArrayList<>();
+        for (ConditionedLink prerequisite : this.prerequisites) {
+            if (prerequisite.condition.isFulfilled(player, null)) {
+                out.add(resolve(prerequisite.id, player));
+            }
         }
-        return out;
+        return out.toArray(AbilityNode[]::new);
     }
 
     public static AbilityNodeLink deserializeFromJson(JsonElement json, ResourceLocation location) {
@@ -83,9 +87,15 @@ public class AbilityNodeLink {
         link.location = new AbilityNode.NodePos(pos.get("x").getAsFloat(), pos.get("y").getAsFloat());
         if (main.has("prerequisites")) {
             JsonArray prereqs = main.getAsJsonArray("prerequisites");
-            link.prerequisites = new ResourceLocation[prereqs.size()];
+            link.prerequisites = new ConditionedLink[prereqs.size()];
             for (int i = 0; i < prereqs.size(); i++) {
-                link.prerequisites[i] = ResourceLocation.parse(prereqs.get(i).getAsString());
+                JsonElement element = prereqs.get(i);
+                if (element.isJsonPrimitive()) {
+                    link.prerequisites[i] = new ConditionedLink(ResourceLocation.parse(element.getAsString()), RequirementInstance.ALWAYS_TRUE);
+                } else {
+                    JsonObject prereq = element.getAsJsonObject();
+                    link.prerequisites[i] = new ConditionedLink(ResourceLocation.parse(prereq.get("id").getAsString()), RequirementInstance.deserialize(prereq.get("only_if")));
+                }
             }
         }
         if (main.has("visible_if")) {
@@ -109,6 +119,10 @@ public class AbilityNodeLink {
         return out;
     }
 
+    public static void clearCache() {
+        RESOLVED.clear();
+    }
+
     private static class SetCondition implements NodeUnlockCondition {
         RequirementSetInstance instance;
 
@@ -125,5 +139,8 @@ public class AbilityNodeLink {
         public MutableComponent getTooltip() {
             return instance.getTooltip();
         }
+    }
+
+    public record ConditionedLink(ResourceLocation id, RequirementInstance condition) {
     }
 }

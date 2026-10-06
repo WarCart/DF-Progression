@@ -1,0 +1,35 @@
+{
+  "requirements": [
+    [
+      {
+        "name": "ability_progression:training_points",
+        "args": {
+          "points": 10,
+          "type": "MARTIAL_ARTS"
+        }
+      }
+    ]
+  ],
+  "pos": {
+    "x": -2.0,
+    "y": 6.0
+  },
+  "prerequisites": [
+    "mineminenomi:hakai_ho"
+  ],
+  "on_unlocked": [
+    {
+      "action": "ability_progression:remove_points",
+      "args": {
+        "points": 10,
+        "type": "MARTIAL_ARTS"
+      }
+    },
+    {
+      "action": "ability_progression:unlock_ability",
+      "args": {
+        "ability": "mineminenomi:jishin_ho"
+      }
+    }
+  ]
+}

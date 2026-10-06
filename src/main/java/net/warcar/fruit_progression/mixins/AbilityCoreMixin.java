@@ -25,13 +25,13 @@ public abstract class AbilityCoreMixin {
     @Inject(method = "getNode(Lnet/minecraft/world/entity/LivingEntity;I)Lxyz/pixelatedw/mineminenomi/api/abilities/nodes/AbilityNode;", at = @At("HEAD"), remap = false, cancellable = true)
     private void newNode(LivingEntity entity, int index, CallbackInfoReturnable<AbilityNode> cir) {
         if (ModDataReaders.ABILITY_TREE_READER.contains(this.getRegistryKey())) {
-            cir.setReturnValue(AbilityNodeLink.resolve(this.getRegistryKey()));
+            cir.setReturnValue(AbilityNodeLink.resolve(this.getRegistryKey(), entity));
             return;
         }
         if (this.getNodeCount() > 1) {
             ResourceLocation withPostfix = ResourceLocation.fromNamespaceAndPath(this.getRegistryKey().getNamespace(), this.getRegistryKey().getPath() + "/" + index);
             if (ModDataReaders.ABILITY_TREE_READER.contains(withPostfix)) {
-                cir.setReturnValue(AbilityNodeLink.resolve(withPostfix));
+                cir.setReturnValue(AbilityNodeLink.resolve(withPostfix, entity));
             }
         }
     }

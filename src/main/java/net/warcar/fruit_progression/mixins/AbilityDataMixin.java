@@ -46,6 +46,7 @@ public abstract class AbilityDataMixin implements IAbilityData, IAbilityDataExte
 
     @ModifyVariable(method = "deserializeNBT(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "STORE"), remap = false, name = "nodesTag")
     private ListTag modifyNodesTag(ListTag nodesTag) {
+        AbilityNodeLink.clearCache();
         for (int i = 0; i < nodesTag.size(); ++i) {
             CompoundTag nodeTag = nodesTag.getCompound(i);
 
@@ -58,7 +59,7 @@ public abstract class AbilityDataMixin implements IAbilityData, IAbilityDataExte
             ResourceLocation location = ResourceLocation.parse(coreId);
 
             if (ModDataReaders.ABILITY_TREE_READER.contains(location)) {
-                node = AbilityNodeLink.resolve(location);
+                node = AbilityNodeLink.resolve(location, this.owner);
 
                 if (node == null) {
                     continue;
@@ -99,7 +100,7 @@ public abstract class AbilityDataMixin implements IAbilityData, IAbilityDataExte
                 continue;
             }
 
-            AbilityNode node = AbilityNodeLink.resolve(loc);
+            AbilityNode node = AbilityNodeLink.resolve(loc, this.owner);
 
             if (node == null) {
                 continue;

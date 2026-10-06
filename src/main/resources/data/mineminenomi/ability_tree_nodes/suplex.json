@@ -1,0 +1,43 @@
+{
+  "requirements": [
+    [
+      {
+        "name": "ability_progression:training_points",
+        "args": {
+          "points": 5,
+          "type": "MARTIAL_ARTS"
+        }
+      }
+    ]
+  ],
+  "pos": {
+    "x": -6.0,
+    "y": 4.0
+  },
+  "prerequisites": [
+    {
+      "id": "mineminenomi:genkotsu_meteor",
+      "only_if": {
+        "name": "!ability_progression:fighting_style",
+        "args": {
+          "style": "mineminenomi:brawler"
+        }
+      }
+    }
+  ],
+  "on_unlocked": [
+    {
+      "action": "ability_progression:remove_points",
+      "args": {
+        "points": 5,
+        "type": "MARTIAL_ARTS"
+      }
+    },
+    {
+      "action": "ability_progression:unlock_ability",
+      "args": {
+        "ability": "mineminenomi:suplex"
+      }
+    }
+  ]
+}

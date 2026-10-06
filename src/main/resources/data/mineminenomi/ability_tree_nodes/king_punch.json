@@ -1,0 +1,37 @@
+{
+  "requirements": [
+    [
+      {
+        "name": "ability_progression:training_points",
+        "args": {
+          "points": 10,
+          "type": "MARTIAL_ARTS"
+        }
+      }
+    ]
+  ],
+  "pos": {
+    "x": -4.0,
+    "y": 8.0
+  },
+  "prerequisites": [
+    "mineminenomi:jishin_ho",
+    "mineminenomi:spinning_brawl",
+    "mineminenomi:genkotsu_meteor"
+  ],
+  "on_unlocked": [
+    {
+      "action": "ability_progression:remove_points",
+      "args": {
+        "points": 10,
+        "type": "MARTIAL_ARTS"
+      }
+    },
+    {
+      "action": "ability_progression:unlock_ability",
+      "args": {
+        "ability": "mineminenomi:king_punch"
+      }
+    }
+  ]
+}
