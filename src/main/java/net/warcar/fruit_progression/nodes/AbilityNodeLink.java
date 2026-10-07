@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.warcar.fruit_progression.data.mixin_interfaces.IAbilityDataExtended;
 import net.warcar.fruit_progression.data.mixin_interfaces.INodeMixin;
 import net.warcar.fruit_progression.init.ModDataReaders;
 import net.warcar.fruit_progression.requirements.RequirementInstance;
@@ -14,14 +15,14 @@ import net.warcar.fruit_progression.requirements.RequirementSetInstance;
 import xyz.pixelatedw.mineminenomi.api.abilities.nodes.AbilityNode;
 import xyz.pixelatedw.mineminenomi.api.abilities.nodes.actions.NodeUnlockAction;
 import xyz.pixelatedw.mineminenomi.api.abilities.nodes.conditions.NodeUnlockCondition;
+import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
+import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 public class AbilityNodeLink {
-    private static final Map<ResourceLocation, AbilityNode> RESOLVED = new HashMap<>();
     private Component localizedName;
     private ResourceLocation icon;
     private AbilityNode.NodePos location;
@@ -41,8 +42,13 @@ public class AbilityNodeLink {
     }
 
     public static AbilityNode resolve(ResourceLocation location, LivingEntity player) {
-        if (RESOLVED.containsKey(location)) {
-            return RESOLVED.get(location);
+        Optional<IAbilityData> dataOptional = AbilityCapability.get(player);
+        if (dataOptional.isPresent()) {
+            IAbilityDataExtended data = (IAbilityDataExtended) dataOptional.get();
+            AbilityNode node = data.ability_progression$getSerialNode(location);
+            if (node != null) {
+                return node;
+            }
         }
         AbilityNodeLink link = ModDataReaders.ABILITY_TREE_READER.get(location);
         AbilityNode node;
@@ -53,7 +59,7 @@ public class AbilityNodeLink {
             e.printStackTrace();
             return null;
         }
-        RESOLVED.put(location, node);
+        dataOptional.map(IAbilityDataExtended.class::cast).ifPresent(data -> data.ability_progression$addSerialNode(location, node));
         return node;
     }
 
@@ -117,10 +123,6 @@ public class AbilityNodeLink {
             out = out.andThen(onUnlocked[i].convert());
         }
         return out;
-    }
-
-    public static void clearCache() {
-        RESOLVED.clear();
     }
 
     private static class SetCondition implements NodeUnlockCondition {

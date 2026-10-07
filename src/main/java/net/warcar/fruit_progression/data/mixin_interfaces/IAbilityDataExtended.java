@@ -5,4 +5,5 @@ import xyz.pixelatedw.mineminenomi.api.abilities.nodes.AbilityNode;
 
 public interface IAbilityDataExtended {
     AbilityNode ability_progression$getSerialNode(ResourceLocation key);
+    void ability_progression$addSerialNode(ResourceLocation key, AbilityNode node);
 }

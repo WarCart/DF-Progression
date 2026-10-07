@@ -46,7 +46,7 @@ public abstract class AbilityDataMixin implements IAbilityData, IAbilityDataExte
 
     @ModifyVariable(method = "deserializeNBT(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "STORE"), remap = false, name = "nodesTag")
     private ListTag modifyNodesTag(ListTag nodesTag) {
-        AbilityNodeLink.clearCache();
+        ability_progression$serialNodes.clear();
         for (int i = 0; i < nodesTag.size(); ++i) {
             CompoundTag nodeTag = nodesTag.getCompound(i);
 
@@ -181,5 +181,10 @@ public abstract class AbilityDataMixin implements IAbilityData, IAbilityDataExte
     @Override
     public AbilityNode ability_progression$getSerialNode(ResourceLocation key) {
         return this.ability_progression$serialNodes.get(key);
+    }
+
+    @Override
+    public void ability_progression$addSerialNode(ResourceLocation key, AbilityNode node) {
+        this.ability_progression$serialNodes.put(key, node);
     }
 }
