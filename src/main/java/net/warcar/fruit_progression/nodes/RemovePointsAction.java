@@ -24,7 +24,7 @@ public class RemovePointsAction extends NodeUnlock {
         EntityStatsCapability.getLazy(entity).ifPresent((props) -> {
             float keep = (float)(GeneralConfig.TRAINING_POINTS_KEEP_PERCENTAGE.get() / 100.0);
             props.alterTrainingPoints(type, Math.round(amount * keep));
-            props.alterSpentTrainingPoints((int) amount);
+            props.alterSpentTrainingPoints(-(int) amount);
         });
     }
 
