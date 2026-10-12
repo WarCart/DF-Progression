@@ -32,6 +32,7 @@ public class DevilFruitProgressionMod {
         ModRequirements.register(bus);
         ModActions.register(bus);
         ModOperators.register(bus);
+        ModQuests.register(bus);
         INSTANCE.registerMessage(0, SSyncAdditionalDataPacket.class, SSyncAdditionalDataPacket::encode, SSyncAdditionalDataPacket::decode, SSyncAdditionalDataPacket::handle);
         INSTANCE.registerMessage(1, CUnlockAbilityNodePacket.class, CUnlockAbilityNodePacket::encode, CUnlockAbilityNodePacket::decode, CUnlockAbilityNodePacket::handle);
         INSTANCE.registerMessage(2, SUnlockAbilityNodePacket.class, SUnlockAbilityNodePacket::encode, SUnlockAbilityNodePacket::decode, SUnlockAbilityNodePacket::handle);

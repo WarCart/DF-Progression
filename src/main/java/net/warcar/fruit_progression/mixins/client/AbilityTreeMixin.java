@@ -6,12 +6,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import net.warcar.fruit_progression.data.mixin_interfaces.INodeMixin;
+import net.warcar.fruit_progression.init.ModTexts;
 import net.warcar.fruit_progression.network.CUnlockAbilityNodePacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.pixelatedw.mineminenomi.api.abilities.nodes.AbilityNode;
@@ -46,6 +48,14 @@ public abstract class AbilityTreeMixin extends Screen {
         else {
             return this.ability_progression$cachedNodes;
         }
+    }
+
+    @ModifyVariable(method = "drawTrainingPointsPanel", at = @At("STORE"), remap = false, name = "typeId")
+    private String additionalMasteries(String old) {
+        if (old == null) {
+            return ModTexts.DEVIL_FRUIT_POINTS_CHECK;
+        }
+        return old;
     }
 
     @Inject(method = "mouseReleased", at = @At(value = "INVOKE", target = "Lxyz/pixelatedw/mineminenomi/data/entity/ability/IAbilityData;getCoreIndexPair(Lxyz/pixelatedw/mineminenomi/api/abilities/nodes/AbilityNode;)Lorg/apache/commons/lang3/tuple/Pair;", remap = false))

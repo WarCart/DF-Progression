@@ -1,5 +1,7 @@
 package net.warcar.fruit_progression.init;
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.init.ModRegistry.I18nCategory;
@@ -34,11 +36,11 @@ public class ModTexts {
 
         Map.Entry<String, String> prevEntry = null;
 
-        File langFolder = new File(WyHelper.getResourceFolderPath() + "/assets/" + DevilFruitProgressionMod.MOD_ID + "/lang/");
+        File langFolder = new File("assets/" + DevilFruitProgressionMod.MOD_ID + "/lang/");
         langFolder.mkdirs();
 
         if (langFolder.exists()) {
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(WyHelper.getResourceFolderPath() + "/assets/" +  DevilFruitProgressionMod.MOD_ID + "/lang/en_us.json"), "UTF-8"))) {
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("assets/" +  DevilFruitProgressionMod.MOD_ID + "/lang/en_us.json"), "UTF-8"))) {
                 writer.write("{\n");
                 while (iter.hasNext()) {
                     Map.Entry<String, String> entry = iter.next();
@@ -65,9 +67,19 @@ public class ModTexts {
         }
     }
 
-    private static String registerName(I18nCategory category, String key, String localizedName) {
+    public static String registerName(I18nCategory category, String key, String localizedName) {
         key = category.getId() + ".ability_progression." + key;
+        registerName(key, localizedName);
+        return key;
+    }
+
+    private static String registerName(String key, String localizedName) {
         LANG_MAP.put(key, localizedName);
         return key;
+    }
+
+    public static Component registerObjectiveTitle(ResourceLocation questId, int objectiveId, String title, Object... args) {
+        String id = registerName(questId + ".objective." + objectiveId, title);
+        return Component.translatable(id, args);
     }
 }
