@@ -28,7 +28,6 @@ public class DevilFruitProgressionMod {
         IEventBus bus = context.getModEventBus();
         bus.addListener(this::registerNewRegistries);
         ModDataReaders.init();
-        ModTexts.init();
         ModRequirements.register(bus);
         ModActions.register(bus);
         ModOperators.register(bus);
@@ -37,6 +36,7 @@ public class DevilFruitProgressionMod {
         INSTANCE.registerMessage(1, CUnlockAbilityNodePacket.class, CUnlockAbilityNodePacket::encode, CUnlockAbilityNodePacket::decode, CUnlockAbilityNodePacket::handle);
         INSTANCE.registerMessage(2, SUnlockAbilityNodePacket.class, SUnlockAbilityNodePacket::encode, SUnlockAbilityNodePacket::decode, SUnlockAbilityNodePacket::handle);
         MinecraftForge.EVENT_BUS.register(this);
+        ModTexts.init();
     }
 
     private void registerNewRegistries(NewRegistryEvent event) {

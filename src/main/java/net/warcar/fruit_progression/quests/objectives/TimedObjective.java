@@ -12,9 +12,9 @@ public class TimedObjective extends Objective implements ISurviveObjective {
 	private int timeToSurvive;
 	private final Predicate<Player> predicate;
 
-	public TimedObjective(Quest parent, Component titleId, int seconds, Predicate<Player> counts) {
+	public TimedObjective(Quest parent, Component titleId, float ticks, Predicate<Player> counts) {
 		super(parent, titleId);
-		this.timeToSurvive = seconds;
+		this.timeToSurvive = (int) ticks;
 		this.setMaxProgress(this.timeToSurvive);
 		this.predicate = counts;
 	}

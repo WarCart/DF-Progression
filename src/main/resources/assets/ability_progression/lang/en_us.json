@@ -1,5 +1,7 @@
 {
 	"ability_node.ability_progression.devil_fruit_points_check": "Devil Fruit Points: %d",
+	"ability_progression:fruit_controls.objective.0": "Use %d devil fruit abilities",
+	"ability_progression:transformation_endurance.objective.0": "Stay in your zoan form for %d minutes",
 
 	"gui.ability_progression.needs_ability_unlocked": "Needs unlocked ability: %s",
 	"gui.ability_progression.needs_awakening": "Needs awakened devil fruit",
@@ -11,5 +13,8 @@
 	"gui.ability_progression.needs_hakixp.total": "Needs total Haki XP: %d",
 	"gui.ability_progression.needs_haoshoku": "Needs to be able to develop Haoshoku haki",
 	"gui.ability_progression.needs_loyalty": "Needs loyalty: %d",
-	"gui.ability_progression.needs_used_ability": "Needs to use %s %d times"
+	"gui.ability_progression.needs_used_ability": "Needs to use %s %d times",
+
+	"quest.ability_progression.fruit_controls": "Fruit controls",
+	"quest.ability_progression.transformation_endurance": "Transformation Endurance"
 }

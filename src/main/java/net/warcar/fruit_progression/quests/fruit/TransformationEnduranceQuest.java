@@ -20,6 +20,7 @@ import java.util.function.Predicate;
 public class TransformationEnduranceQuest extends Quest {
     public static final RegistryObject<QuestId<TransformationEnduranceQuest>> INSTANCE = ModQuests.registerQuest(() -> new QuestId.Builder<>(TransformationEnduranceQuest::new)
             .setRepeatCooldown(WyHelper.hoursToTicks(2.0F))
+            .addRequirements(FruitControlsQuest.INSTANCE)
             .build(), "Transformation Endurance");
     private static final Component TITLE_1 = ModTexts.registerObjectiveTitle(INSTANCE.getId(), 0, "Stay in your zoan form for %d minutes", 5);
 
@@ -29,7 +30,7 @@ public class TransformationEnduranceQuest extends Quest {
     };
 
 
-    private final TimedObjective objective = new TimedObjective(this, TITLE_1, 300, CHECK);
+    private final TimedObjective objective = new TimedObjective(this, TITLE_1, WyHelper.minutesToTicks(5), CHECK);
     public TransformationEnduranceQuest(QuestId<TransformationEnduranceQuest> core) {
         super(core);
 
