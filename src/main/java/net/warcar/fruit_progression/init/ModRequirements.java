@@ -35,5 +35,6 @@ public class ModRequirements {
         registerRequirement(new LoyaltyRequirement(), "loyalty");
         registerRequirement(new UsedAbilityRequirement(), "ability_used");
         registerRequirement(new TrainingPointsRequirement(), "training_points");
+        registerRequirement(new NodeRequirement(), "node");
     }
 }

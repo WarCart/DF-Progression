@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import net.warcar.fruit_progression.data.mixin_interfaces.IAbilityDataExtended;
 import net.warcar.fruit_progression.data.mixin_interfaces.INodeMixin;
 import net.warcar.fruit_progression.init.ModDataReaders;
@@ -19,6 +20,7 @@ import xyz.pixelatedw.mineminenomi.data.entity.ability.AbilityCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.ability.IAbilityData;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -114,10 +116,24 @@ public class AbilityNodeLink {
             onUnlocked[i] = NodeUnlockInstance.deserialize(onUnlock.get(i));
         }
         link.onUnlock = bakeUnlocked(onUnlocked);
+        if (main.has("debug") && main.get("debug").getAsBoolean()) {
+            DevilFruitProgressionMod.LOGGER.info(link);
+        }
         return link;
     }
 
     private static NodeUnlockAction bakeUnlocked(NodeUnlockInstance[] onUnlocked) {
+        if (onUnlocked.length == 0) {
+            return new NodeUnlockAction() {
+                @Override
+                public void onUnlock(LivingEntity livingEntity) {
+                }
+
+                @Override
+                public void onLock(LivingEntity livingEntity) {
+                }
+            };
+        }
         NodeUnlockAction out = onUnlocked[0].convert();
         for (int i = 1; i < onUnlocked.length; i++) {
             out = out.andThen(onUnlocked[i].convert());
@@ -144,5 +160,10 @@ public class AbilityNodeLink {
     }
 
     public record ConditionedLink(ResourceLocation id, RequirementInstance condition) {
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[Custom node: %s, icon: %s, at coords (%s), only visible if %s, requiring %s, with prerequisites %s]", this.localizedName, this.icon, this.location, this.visibleIf, this.requirementSet, Arrays.toString(this.prerequisites));
     }
 }

@@ -10,14 +10,12 @@ import net.warcar.fruit_progression.data.mixin_interfaces.INodeMixin;
 import net.warcar.fruit_progression.init.ModDataReaders;
 import net.warcar.fruit_progression.nodes.AbilityNodeLink;
 import org.apache.commons.lang3.tuple.Pair;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.pixelatedw.mineminenomi.api.WyRegistry;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
@@ -39,10 +37,6 @@ public abstract class AbilityDataMixin implements IAbilityData, IAbilityDataExte
 
     @Shadow
     private LivingEntity owner;
-
-    @Shadow
-    @Final
-    private Map<Pair<AbilityCore<? extends IAbility>, Integer>, AbilityNode> nodes;
 
     @ModifyVariable(method = "deserializeNBT(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "STORE"), remap = false, name = "nodesTag")
     private ListTag modifyNodesTag(ListTag nodesTag) {
@@ -132,11 +126,6 @@ public abstract class AbilityDataMixin implements IAbilityData, IAbilityDataExte
             }
         }
         return new ListTag();
-    }
-
-    @Inject(method = "deserializeNBT(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("TAIL"), remap = false)
-    private void undoNodes(CompoundTag props, CallbackInfo ci) {
-        //this.nodes.clear();
     }
 
     @Inject(method = "serializeNBT()Lnet/minecraft/nbt/CompoundTag;", at = @At("RETURN"), remap = false, cancellable = true)

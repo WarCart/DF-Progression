@@ -1,4 +1,4 @@
-package net.warcar.fruit_progression.new_data_reader;
+package net.warcar.fruit_progression.equations;
 
 import net.minecraft.world.entity.LivingEntity;
 import xyz.pixelatedw.mineminenomi.api.enums.HakiType;
@@ -105,10 +105,8 @@ public class EquationHelper {
         String op = equation.substring(0, firstBracket);
         if (op.equalsIgnoreCase("n")) {
             String num = equation.substring(firstBracket + 1, equation.indexOf(")"));
-            //HitoHitoNoMiNikaMod.LOGGER.info("Flat number: {} with equation {}", num, equation);
             return new ParseResult(3 + num.length(), Float.parseFloat(num));
         } else if (bonus.containsKey(op)) {
-            //HitoHitoNoMiNikaMod.LOGGER.info("Remapped from bonus {}: {}", op, bonus.get(op));
             return new ParseResult(op.length() + 2, bonus.get(op));
         }
         Operator operator = operators.get(op);
