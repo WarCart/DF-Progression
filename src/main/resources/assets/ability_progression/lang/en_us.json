@@ -1,5 +1,6 @@
 {
 	"ability_node.ability_progression.devil_fruit_points_check": "Devil Fruit Points: %d",
+	"ability_progression:fine_control.objective.0": "Attack %d entities with devil fruit abilities",
 	"ability_progression:fruit_controls.objective.0": "Use %d devil fruit abilities",
 	"ability_progression:transformation_endurance.objective.0": "Stay in your zoan form for %d minutes",
 
@@ -15,6 +16,7 @@
 	"gui.ability_progression.needs_loyalty": "Needs loyalty: %d",
 	"gui.ability_progression.needs_used_ability": "Needs to use %s %d times",
 
+	"quest.ability_progression.fine_control": "Fine control",
 	"quest.ability_progression.fruit_controls": "Fruit controls",
 	"quest.ability_progression.transformation_endurance": "Transformation Endurance"
 }

@@ -10,19 +10,23 @@ import java.util.function.Predicate;
 
 public class TimedObjective extends Objective implements ISurviveObjective {
 	private int timeToSurvive;
-	private final Predicate<Player> predicate;
+    private final boolean hard;
+    private final Predicate<Player> predicate;
 
-	public TimedObjective(Quest parent, Component titleId, float ticks, Predicate<Player> counts) {
+	public TimedObjective(Quest parent, Component titleId, float ticks, Predicate<Player> counts, boolean hard) {
 		super(parent, titleId);
 		this.timeToSurvive = (int) ticks;
-		this.setMaxProgress(this.timeToSurvive);
+        this.hard = hard;
+        this.setMaxProgress(this.timeToSurvive);
 		this.predicate = counts;
 	}
 
 	@Override
 	public boolean checkTime(Player player) {
 		if (!predicate.test(player)) {
-			this.setProgress(player, 0, false);
+			if (hard) {
+				this.setProgress(player, 0, false);
+			}
 			return false;
 		}
 		return true;

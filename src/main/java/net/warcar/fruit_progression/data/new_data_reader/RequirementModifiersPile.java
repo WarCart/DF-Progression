@@ -1,4 +1,4 @@
-package net.warcar.fruit_progression.new_data_reader;
+package net.warcar.fruit_progression.data.new_data_reader;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

@@ -15,7 +15,7 @@ import net.warcar.fruit_progression.DevilFruitProgressionMod;
 import net.warcar.fruit_progression.data.entity.abilities_addition.AbilityAdditionDataCapability;
 import net.warcar.fruit_progression.network.SSyncAdditionalDataPacket;
 import net.warcar.fruit_progression.init.ModDataReaders;
-import net.warcar.fruit_progression.new_data_reader.RequirementModifiersPile;
+import net.warcar.fruit_progression.data.new_data_reader.RequirementModifiersPile;
 import net.warcar.fruit_progression.requirements.RequirementSetInstance;
 import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
 import xyz.pixelatedw.mineminenomi.api.events.ability.AbilityUseEvent;

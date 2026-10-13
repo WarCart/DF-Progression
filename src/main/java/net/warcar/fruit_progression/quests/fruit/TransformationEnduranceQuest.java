@@ -24,13 +24,13 @@ public class TransformationEnduranceQuest extends Quest {
             .build(), "Transformation Endurance");
     private static final Component TITLE_1 = ModTexts.registerObjectiveTitle(INSTANCE.getId(), 0, "Stay in your zoan form for %d minutes", 5);
 
-    private static final Predicate<Player> CHECK = (player) -> {
+    public static final Predicate<Player> CHECK = (player) -> {
         MorphInfo info = DevilFruitCapability.get(player).map(IDevilFruit::getCurrentMorph).flatMap(o -> o).orElse(null);
         return info != null;
     };
 
 
-    private final TimedObjective objective = new TimedObjective(this, TITLE_1, WyHelper.minutesToTicks(5), CHECK);
+    private final TimedObjective objective = new TimedObjective(this, TITLE_1, WyHelper.minutesToTicks(5), CHECK, false);
     public TransformationEnduranceQuest(QuestId<TransformationEnduranceQuest> core) {
         super(core);
 

@@ -4,7 +4,9 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
+import net.warcar.fruit_progression.quests.fruit.FineControlQuest;
 import net.warcar.fruit_progression.quests.fruit.FruitControlsQuest;
+import net.warcar.fruit_progression.quests.fruit.PermanentMergeQuest;
 import net.warcar.fruit_progression.quests.fruit.TransformationEnduranceQuest;
 import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.WyRegistry;
@@ -19,8 +21,8 @@ import java.util.function.Supplier;
 public class ModQuests {
     public static final DeferredRegister<QuestId<?>> QUESTS_REGISTER = DeferredRegister.create(WyRegistry.Keys.QUESTS, DevilFruitProgressionMod.MOD_ID);
 
-    public static final List<RegistryObject<? extends QuestId<? extends Quest>>> DF_QUESTS = Arrays.asList(FruitControlsQuest.INSTANCE);
-    public static final List<RegistryObject<? extends QuestId<? extends Quest>>> ZOAN_QUESTS = Arrays.asList(TransformationEnduranceQuest.INSTANCE);
+    public static final List<RegistryObject<? extends QuestId<? extends Quest>>> DF_QUESTS = Arrays.asList(FruitControlsQuest.INSTANCE, FineControlQuest.INSTANCE);
+    public static final List<RegistryObject<? extends QuestId<? extends Quest>>> ZOAN_QUESTS = Arrays.asList(TransformationEnduranceQuest.INSTANCE, PermanentMergeQuest.INSTANCE);
 
     public static <T extends QuestId<?>> RegistryObject<T> registerQuest(Supplier<T> supplier, String name) {
         String resourceName = WyHelper.getResourceName(name);
