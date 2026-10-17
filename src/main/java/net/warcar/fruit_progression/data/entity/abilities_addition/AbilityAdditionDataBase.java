@@ -1,21 +1,32 @@
 package net.warcar.fruit_progression.data.entity.abilities_addition;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.registries.ForgeRegistries;
 import xyz.pixelatedw.mineminenomi.api.WyRegistry;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
+import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class AbilityAdditionDataBase implements IAbilityAdditionData {
+    private final LivingEntity owner;
     private final Map<AbilityCore<? extends IAbility>, Integer> map;
     private float devilFruitMastery;
+    private final Set<AkumaNoMiItem> seenFruits;
 
-    public AbilityAdditionDataBase() {
+    public AbilityAdditionDataBase(LivingEntity owner) {
         this.map = new HashMap<>();
+        this.owner = owner;
+        this.seenFruits = new HashSet<>();
     }
 
     public Map<AbilityCore<? extends IAbility>, Integer> getMap() {
@@ -56,6 +67,11 @@ public class AbilityAdditionDataBase implements IAbilityAdditionData {
         });
         props.put("map", map);
         props.putFloat("devilFruitMastery", this.devilFruitMastery);
+        ListTag seen = new ListTag();
+        for (AkumaNoMiItem df : this.seenFruits) {
+            seen.add(StringTag.valueOf(df.getRegistryKey().toString()));
+        }
+        props.put("seenFruits", seen);
         return props;
     }
 
@@ -65,5 +81,27 @@ public class AbilityAdditionDataBase implements IAbilityAdditionData {
             this.setUsages(WyRegistry.ABILITIES.get().getValue(ResourceLocation.parse(name)), compoundNBT.getInt(name));
         }
         this.devilFruitMastery = nbt.getFloat("devilFruitMastery");
+        ListTag seen = nbt.getList("seenFruits", 8);
+        for (int i = 0; i < seen.size(); i++) {
+            ResourceLocation id = ResourceLocation.tryParse(seen.getString(i));
+            if (id == null)
+                continue;
+            if (ForgeRegistries.ITEMS.getValue(id) instanceof AkumaNoMiItem df)
+                this.seenFruits.add(df);
+        }
+    }
+
+    public LivingEntity getOwner() {
+        return this.owner;
+    }
+
+    @Override
+    public boolean hasReadAbout(AkumaNoMiItem df) {
+        return this.seenFruits.contains(df);
+    }
+
+    @Override
+    public void setRead(AkumaNoMiItem df) {
+        this.seenFruits.add(df);
     }
 }

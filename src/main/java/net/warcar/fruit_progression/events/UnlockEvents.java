@@ -89,8 +89,8 @@ public class UnlockEvents {
 
     @SubscribeEvent
     public static void attachCapabilities(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof LivingEntity) {
-            event.addCapability(ResourceLocation.fromNamespaceAndPath(DevilFruitProgressionMod.MOD_ID, "ability_addition"), new AbilityAdditionDataCapability());
+        if (event.getObject() instanceof LivingEntity entity) {
+            event.addCapability(ResourceLocation.fromNamespaceAndPath(DevilFruitProgressionMod.MOD_ID, "ability_addition"), new AbilityAdditionDataCapability(entity));
         }
     }
 

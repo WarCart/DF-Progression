@@ -1,4 +1,4 @@
-package net.warcar.fruit_progression.quests.fruit;
+package net.warcar.fruit_progression.quests.fruit.zoan;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -6,6 +6,7 @@ import net.minecraftforge.registries.RegistryObject;
 import net.warcar.fruit_progression.init.ModQuests;
 import net.warcar.fruit_progression.init.ModRequirements;
 import net.warcar.fruit_progression.init.ModTexts;
+import net.warcar.fruit_progression.quests.fruit.FruitControlsQuest;
 import net.warcar.fruit_progression.quests.objectives.TimedObjective;
 import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.api.morph.MorphInfo;

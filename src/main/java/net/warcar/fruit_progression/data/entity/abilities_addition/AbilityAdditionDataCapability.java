@@ -20,8 +20,8 @@ public class AbilityAdditionDataCapability implements ICapabilitySerializable<Co
         return getLazy(entity).resolve();
     }
 
-    public AbilityAdditionDataCapability() {
-        this.instance = new AbilityAdditionDataBase();
+    public AbilityAdditionDataCapability(LivingEntity entity) {
+        this.instance = new AbilityAdditionDataBase(entity);
     }
 
     public static LazyOptional<IAbilityAdditionData> getLazy(LivingEntity entity) {

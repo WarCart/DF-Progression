@@ -24,7 +24,7 @@ public abstract class AbilityCoreMixin {
 
     @Inject(method = "getNode(Lnet/minecraft/world/entity/LivingEntity;I)Lxyz/pixelatedw/mineminenomi/api/abilities/nodes/AbilityNode;", at = @At("HEAD"), remap = false, cancellable = true)
     private void newNode(LivingEntity entity, int index, CallbackInfoReturnable<AbilityNode> cir) {
-        if (ModDataReaders.ABILITY_TREE_READER.contains(this.getRegistryKey())) {
+        if (ModDataReaders.ABILITY_TREE_READER.contains(this.getRegistryKey()) && this.getNodeCount() <= 1) {
             cir.setReturnValue(AbilityNodeLink.resolve(this.getRegistryKey(), entity));
             return;
         }
