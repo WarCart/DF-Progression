@@ -4,11 +4,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraftforge.registries.NewRegistryEvent;
 import net.minecraftforge.registries.RegistryBuilder;
+import net.warcar.fruit_progression.config.ModConfig;
 import net.warcar.fruit_progression.init.*;
 import net.warcar.fruit_progression.network.CUnlockAbilityNodePacket;
 import net.warcar.fruit_progression.network.SSyncAdditionalDataPacket;
@@ -35,6 +37,7 @@ public class DevilFruitProgressionMod {
         INSTANCE.registerMessage(0, SSyncAdditionalDataPacket.class, SSyncAdditionalDataPacket::encode, SSyncAdditionalDataPacket::decode, SSyncAdditionalDataPacket::handle);
         INSTANCE.registerMessage(1, CUnlockAbilityNodePacket.class, CUnlockAbilityNodePacket::encode, CUnlockAbilityNodePacket::decode, CUnlockAbilityNodePacket::handle);
         INSTANCE.registerMessage(2, SUnlockAbilityNodePacket.class, SUnlockAbilityNodePacket::encode, SUnlockAbilityNodePacket::decode, SUnlockAbilityNodePacket::handle);
+        context.registerConfig(Type.COMMON, ModConfig.SPEC);
         MinecraftForge.EVENT_BUS.register(this);
         ModTexts.init();
     }

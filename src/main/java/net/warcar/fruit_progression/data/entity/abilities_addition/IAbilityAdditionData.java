@@ -2,6 +2,7 @@ package net.warcar.fruit_progression.data.entity.abilities_addition;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
+import net.warcar.fruit_progression.config.ModConfig;
 import net.warcar.fruit_progression.init.ModRequirements;
 import xyz.pixelatedw.mineminenomi.api.abilities.AbilityCore;
 import xyz.pixelatedw.mineminenomi.api.abilities.IAbility;
@@ -10,6 +11,7 @@ import xyz.pixelatedw.mineminenomi.data.entity.stats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
 
 import java.util.Map;
+import java.util.Set;
 
 public interface IAbilityAdditionData {
     Map<AbilityCore<? extends IAbility>, Integer> getMap();
@@ -45,16 +47,29 @@ public interface IAbilityAdditionData {
             return false;
         }
         int points;
-        if (DevilFruitCapability.hasDevilFruit(this.getOwner(), df)) {
-            points = 5;
+        LivingEntity owner = this.getOwner();
+        if (DevilFruitCapability.hasDevilFruit(owner, df)) {
+            points = ModConfig.getPointsForOwnFruit();
+            this.readAboutOwnFruit();
         } else {
-            points = 1;
+            if (owner.getRandom().nextDouble() <= ModConfig.getChanceForOtherFruit()) {
+                points = ModConfig.getPointsForOtherFruit();
+            } else {
+                points = 0;
+            }
         }
-        EntityStatsCapability.getLazy(this.getOwner()).ifPresent(props ->
-                props.alterTrainingPoints(ModRequirements.DEVIL_FRUIT_POINTS, points));
+        EntityStatsCapability.getLazy(owner).ifPresent(props -> {
+            props.alterTrainingPoints(ModRequirements.DEVIL_FRUIT_POINTS, points);
+        });
         setRead(df);
         return true;
     }
 
     void setRead(AkumaNoMiItem df);
+
+    Set<AkumaNoMiItem> allReadFruits();
+
+    boolean hasReadAboutOwnFruit();
+
+    void readAboutOwnFruit();
 }

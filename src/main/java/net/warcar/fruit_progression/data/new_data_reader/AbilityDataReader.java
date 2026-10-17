@@ -41,6 +41,9 @@ public class AbilityDataReader<T> extends SimpleJsonResourceReloadListener {
     }
 
     public T get(ResourceLocation location) {
+        if (location == null) {
+            return null;
+        }
         return this.map.get(location);
     }
 

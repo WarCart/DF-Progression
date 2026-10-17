@@ -2,11 +2,15 @@
 	"ability_node.ability_progression.devil_fruit_points_check": "Devil Fruit Points: %d",
 	"ability_progression:fine_control.objective.0": "Attack %d entities with devil fruit abilities",
 	"ability_progression:fruit_controls.objective.0": "Use %d devil fruit abilities",
+	"ability_progression:killing_intent.objective.0": "Attack %d entities with devil fruit abilities",
+	"ability_progression:killing_intent.objective.1": "Kill %d entities with devil fruit abilities",
 	"ability_progression:permanent_merge.objective.0": "Stay in your zoan form for %d minutes consecutively",
 	"ability_progression:permanent_merge.objective.1": "Kill %d enemies while in your zoan form",
 	"ability_progression:transformation_endurance.objective.0": "Stay in your zoan form for %d minutes",
 
+	"gui.ability_progression.already_read": "You already know about %s",
 	"gui.ability_progression.needs_ability_unlocked": "Needs unlocked ability: %s",
+	"gui.ability_progression.needs_any_df": "Needs devil fruit",
 	"gui.ability_progression.needs_awakening": "Needs awakened devil fruit",
 	"gui.ability_progression.needs_df": "Needs devil fruit: %s",
 	"gui.ability_progression.needs_df_mastery": "Needs devil fruit mastery: %d",
@@ -17,9 +21,11 @@
 	"gui.ability_progression.needs_haoshoku": "Needs to be able to develop Haoshoku haki",
 	"gui.ability_progression.needs_loyalty": "Needs loyalty: %d",
 	"gui.ability_progression.needs_used_ability": "Needs to use %s %d times",
+	"gui.ability_progression.save": "Save progress",
 
 	"quest.ability_progression.fine_control": "Fine control",
 	"quest.ability_progression.fruit_controls": "Fruit controls",
+	"quest.ability_progression.killing_intent": "Killing Intent",
 	"quest.ability_progression.permanent_merge": "Permanent merge",
 	"quest.ability_progression.transformation_endurance": "Transformation Endurance"
 }

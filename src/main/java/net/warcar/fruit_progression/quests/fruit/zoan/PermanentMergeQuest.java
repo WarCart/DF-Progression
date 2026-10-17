@@ -2,6 +2,7 @@ package net.warcar.fruit_progression.quests.fruit.zoan;
 
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.registries.RegistryObject;
+import net.warcar.fruit_progression.events.TrainingEvents;
 import net.warcar.fruit_progression.init.ModQuests;
 import net.warcar.fruit_progression.init.ModRequirements;
 import net.warcar.fruit_progression.init.ModTexts;
@@ -22,9 +23,9 @@ public class PermanentMergeQuest extends Quest {
 
 
 
-    private final TimedObjective objective = new TimedObjective(this, TITLE_1, WyHelper.minutesToTicks(10), TransformationEnduranceQuest.CHECK, true);
+    private final TimedObjective objective = new TimedObjective(this, TITLE_1, WyHelper.minutesToTicks(10), TrainingEvents.IS_MORPHED, true);
     private final KillEntityObjective objective2 = new KillEntityObjective(this, TITLE_2, 35, (player, livingEntity, damageSource) ->
-            TransformationEnduranceQuest.CHECK.test(player));
+            TrainingEvents.IS_MORPHED.test(player));
     public PermanentMergeQuest(QuestId<PermanentMergeQuest> core) {
         super(core);
 

@@ -7,46 +7,64 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
+import net.warcar.fruit_progression.config.ModConfig;
 import net.warcar.fruit_progression.data.entity.abilities_addition.AbilityAdditionDataCapability;
+import net.warcar.fruit_progression.init.ModRequirements;
+import net.warcar.fruit_progression.init.ModTexts;
+import net.warcar.fruit_progression.network.SSyncAdditionalDataPacket;
 import xyz.pixelatedw.mineminenomi.api.DFEncyclopediaEntry;
 import xyz.pixelatedw.mineminenomi.config.ServerConfig;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.DevilFruitCapability;
 import xyz.pixelatedw.mineminenomi.data.entity.devilfruit.IDevilFruit;
+import xyz.pixelatedw.mineminenomi.data.entity.stats.EntityStatsCapability;
 import xyz.pixelatedw.mineminenomi.init.ModItems;
 import xyz.pixelatedw.mineminenomi.init.ModNetwork;
 import xyz.pixelatedw.mineminenomi.init.i18n.ModI18n;
 import xyz.pixelatedw.mineminenomi.items.AkumaNoMiItem;
+import xyz.pixelatedw.mineminenomi.items.DFEncyclopediaItem;
+import xyz.pixelatedw.mineminenomi.packets.server.SSyncEntityStatsPacket;
+import xyz.pixelatedw.mineminenomi.packets.server.SSyncQuestDataPacket;
 import xyz.pixelatedw.mineminenomi.packets.server.ui.SOpenEncyclopediaScreenPacket;
 
+import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mod.EventBusSubscriber(modid = DevilFruitProgressionMod.MOD_ID)
 public class FruitEncyclopediaEvents {
+    public static final Component STOLEN_CONFIG_ERROR;
+
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onEntityRightClickItem(PlayerInteractEvent.RightClickItem event) {
+        if (!ModConfig.isEncyclopediaOverhauled()) {
+            return;
+        }
         Player player = event.getEntity();
         ItemStack heldStack = event.getItemStack();
         IDevilFruit props = DevilFruitCapability.get(player).orElse(null);
 
-        handleClueUsage(player, heldStack);
+        if (handleClueUsage(player, heldStack)) {
+            event.cancel();
+        }
         if (handleBook(player, heldStack)) {
             event.cancel();
         }
     }
 
-    public static void handleClueUsage(Player player, ItemStack stack) {
+    public static boolean handleClueUsage(Player player, ItemStack stack) {
         if (stack.isEmpty() || stack.getItem() != Items.PAPER || !stack.hasTag() || stack.getTag().isEmpty() || player.level().isClientSide) {
-            return;
+            return false;
         }
 
         if(stack.getTagElement(DFEncyclopediaEntry.FRUIT_CLUES_TAG) == null) {
-            return;
+            return false;
         }
 
         CompoundTag nbt = stack.getTagElement(DFEncyclopediaEntry.FRUIT_CLUES_TAG);
@@ -56,15 +74,23 @@ public class FruitEncyclopediaEvents {
             AbilityAdditionDataCapability.getLazy(player).ifPresent(data -> {
                 flag.set(data.readAbout(df));
             });
+            ModNetwork.sendToAllTrackingAndSelf(new SSyncEntityStatsPacket(player, EntityStatsCapability.get(player)), player);
         } else {
-            DevilFruitProgressionMod.LOGGER.debug("{} is not a devil fruit?", key);
+            DevilFruitProgressionMod.LOGGER.warn("{} is not a devil fruit?", key);
         }
 
-        if(flag.get() && !ServerConfig.getRandomizedFruits()) {
-            stack.shrink(1);
+        if (!ServerConfig.getRandomizedFruits()) {
             Item item = ForgeRegistries.ITEMS.getValue(key);
-            player.displayClientMessage(Component.translatable(ModI18n.ITEM_MESSAGE_GAINED_FRUIT_CLUE, item.getDescription().getString()), false);
+            if (flag.get()) {
+                stack.shrink(1);
+                player.displayClientMessage(Component.translatable(ModI18n.ITEM_MESSAGE_GAINED_FRUIT_CLUE, item.getDescription().getString()), false);
+                return false;
+            } else {
+                player.displayClientMessage(Component.translatable(ModTexts.ALREADY_READ, item.getDescription().getString()), false);
+                return true;
+            }
         }
+        return false;
     }
 
     public static boolean handleBook(Player player, ItemStack stack) {
@@ -82,8 +108,38 @@ public class FruitEncyclopediaEvents {
                     }
                 }
             }
+            for (AkumaNoMiItem df : data.allReadFruits()) {
+                if (DevilFruitCapability.hasDevilFruit(player, df) && !data.hasReadAboutOwnFruit()) {
+                    EntityStatsCapability.getLazy(player).ifPresent(props -> {
+                        props.alterTrainingPoints(ModRequirements.DEVIL_FRUIT_POINTS, ModConfig.getPointsForOwnFruit() - ModConfig.getPointsForOtherFruit());
+                    });
+                    data.readAboutOwnFruit();
+                }
+            }
+            ModNetwork.sendToAllTrackingAndSelf(new SSyncEntityStatsPacket(player), player);
+            DevilFruitProgressionMod.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player), new SSyncAdditionalDataPacket(player, data));
         });
         ModNetwork.sendTo(new SOpenEncyclopediaScreenPacket(stack), player);
+        ModNetwork.sendTo(new SSyncQuestDataPacket(player), player);
         return !ServerConfig.getRandomizedFruits();
+    }
+
+    @SubscribeEvent
+    public static void onTooltip(ItemTooltipEvent event) {
+        if (ModConfig.isEncyclopediaOverhauled() && !ServerConfig.getRandomizedFruits() && event.getItemStack().getItem() instanceof DFEncyclopediaItem) {
+            event.getToolTip().remove(STOLEN_CONFIG_ERROR);
+        }
+    }
+
+    static {
+        Component c = null;
+        try {
+            Field error = DFEncyclopediaItem.class.getDeclaredField("CONFIG_ERROR");
+            error.setAccessible(true);
+            c = (Component) error.get(null);
+            error.setAccessible(false);
+        } catch (ReflectiveOperationException ignored) {
+        }
+        STOLEN_CONFIG_ERROR = c;
     }
 }

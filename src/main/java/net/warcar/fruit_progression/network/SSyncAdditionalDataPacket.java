@@ -23,7 +23,7 @@ public class SSyncAdditionalDataPacket {
 
     public SSyncAdditionalDataPacket(Entity entity, IAbilityAdditionData data) {
         this.entityId = entity.getId();
-        this.data = (CompoundTag) data;
+        this.data = data.serializeNBT();
     }
 
     public void encode(FriendlyByteBuf buffer) {

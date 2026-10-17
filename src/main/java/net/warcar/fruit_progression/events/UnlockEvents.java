@@ -12,6 +12,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
+import net.warcar.fruit_progression.config.ModConfig;
 import net.warcar.fruit_progression.data.entity.abilities_addition.AbilityAdditionDataCapability;
 import net.warcar.fruit_progression.network.SSyncAdditionalDataPacket;
 import net.warcar.fruit_progression.init.ModDataReaders;
@@ -76,6 +77,9 @@ public class UnlockEvents {
     private static void checkForAwakening(LivingEntity player) {
         DevilFruitCapability.get(player).ifPresent(props -> props.getDevilFruit().ifPresent(fruit -> {
             RequirementSetInstance instance = ModDataReaders.AWAKENINGS_READER.get(fruit);
+            if (instance == null) {
+                instance = ModConfig.awakeningDefault();
+            }
             if (instance != null) {
                 if (props.hasAwakenedFruit() != instance.isFulfilled(player, null)) {
                     props.setAwakenedFruit(instance.isFulfilled(player, null));

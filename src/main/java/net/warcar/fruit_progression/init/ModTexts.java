@@ -2,15 +2,10 @@ package net.warcar.fruit_progression.init;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.warcar.fruit_progression.DevilFruitProgressionMod;
-import xyz.pixelatedw.mineminenomi.api.WyHelper;
 import xyz.pixelatedw.mineminenomi.init.ModRegistry.I18nCategory;
 
-import java.io.*;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 
 public class ModTexts {
@@ -21,6 +16,7 @@ public class ModTexts {
     public static final String NEEDS_AWAKENING = registerName(I18nCategory.GUI, "needs_awakening", "Needs awakened devil fruit");
     public static final String NEEDS_DF_MASTERY = registerName(I18nCategory.GUI, "needs_df_mastery", "Needs devil fruit mastery: %d");
     public static final String NEEDS_DF = registerName(I18nCategory.GUI, "needs_df", "Needs devil fruit: %s");
+    public static final String NEEDS_ANY_DF = registerName(I18nCategory.GUI, "needs_any_df", "Needs devil fruit");
     public static final String NEEDS_TOTAL_HAKIXP = registerName(I18nCategory.GUI, "needs_hakixp.total", "Needs total Haki XP: %d");
     public static final String NEEDS_KENB_HAKIXP = registerName(I18nCategory.GUI, "needs_hakixp.kenb", "Needs kenbunshoku Haki XP: %d");
     public static final String NEEDS_BUSO_HAKIXP = registerName(I18nCategory.GUI, "needs_hakixp.buso", "Needs busoshoku Haki XP: %d");
@@ -28,8 +24,10 @@ public class ModTexts {
     public static final String NEEDS_LOYALTY = registerName(I18nCategory.GUI, "needs_loyalty", "Needs loyalty: %d");
     public static final String NEEDS_QUEST = registerName(I18nCategory.GUI, "needs_finished_quest", "Needs finished quest: %s");
     public static final String NEEDS_USED_ABILITY = registerName(I18nCategory.GUI, "needs_used_ability", "Needs to use %s %d times");
+    public static final String ALREADY_READ = registerName(I18nCategory.GUI, "already_read", "You already know about %s");
+    public static final String SAVE = registerName(I18nCategory.GUI, "save", "Save progress");
 
-    public static void init() {
+    public static void init() {/*
         Map<String, String> sorted = WyHelper.sortAlphabetically(LANG_MAP);
         Set<Map.Entry<String, String>> set = sorted.entrySet();
         Iterator<Map.Entry<String, String>> iter = set.iterator();
@@ -64,7 +62,7 @@ public class ModTexts {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     public static String registerName(I18nCategory category, String key, String localizedName) {

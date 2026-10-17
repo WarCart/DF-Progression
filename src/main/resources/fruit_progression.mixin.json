@@ -9,10 +9,14 @@
     "AbilityNodeMixin",
     "ContinuousComponentMixin",
     "DevilFruitDataMixin",
-    "IAbilityDataMixin"
+    "IAbilityDataMixin",
+    "PlayerMixin",
+    "RandomizedFruitMixin",
+    "CUpdateQuestPacketMixin"
   ],
   "client": [
-    "client.AbilityTreeMixin"
+    "client.AbilityTreeMixin",
+    "client.EncyclopediaScreenMixin"
   ],
   "server": [],
   "injectors": {

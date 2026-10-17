@@ -22,6 +22,7 @@ public class AbilityAdditionDataBase implements IAbilityAdditionData {
     private final Map<AbilityCore<? extends IAbility>, Integer> map;
     private float devilFruitMastery;
     private final Set<AkumaNoMiItem> seenFruits;
+    private boolean hasReadOwnFruit;
 
     public AbilityAdditionDataBase(LivingEntity owner) {
         this.map = new HashMap<>();
@@ -72,6 +73,7 @@ public class AbilityAdditionDataBase implements IAbilityAdditionData {
             seen.add(StringTag.valueOf(df.getRegistryKey().toString()));
         }
         props.put("seenFruits", seen);
+        props.putBoolean("hasReadOwnFruit", this.hasReadOwnFruit);
         return props;
     }
 
@@ -89,6 +91,7 @@ public class AbilityAdditionDataBase implements IAbilityAdditionData {
             if (ForgeRegistries.ITEMS.getValue(id) instanceof AkumaNoMiItem df)
                 this.seenFruits.add(df);
         }
+        this.hasReadOwnFruit = nbt.getBoolean("hasReadOwnFruit");
     }
 
     public LivingEntity getOwner() {
@@ -103,5 +106,20 @@ public class AbilityAdditionDataBase implements IAbilityAdditionData {
     @Override
     public void setRead(AkumaNoMiItem df) {
         this.seenFruits.add(df);
+    }
+
+    @Override
+    public Set<AkumaNoMiItem> allReadFruits() {
+        return new HashSet<>(this.seenFruits);
+    }
+
+    @Override
+    public boolean hasReadAboutOwnFruit() {
+        return this.hasReadOwnFruit;
+    }
+
+    @Override
+    public void readAboutOwnFruit() {
+        this.hasReadOwnFruit = true;
     }
 }
