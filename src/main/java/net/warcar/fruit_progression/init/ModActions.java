@@ -3,6 +3,7 @@ package net.warcar.fruit_progression.init;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.warcar.fruit_progression.DevilFruitProgressionMod;
+import net.warcar.fruit_progression.nodes.AwakenFruitAction;
 import net.warcar.fruit_progression.nodes.NodeUnlock;
 import net.warcar.fruit_progression.nodes.RemovePointsAction;
 import net.warcar.fruit_progression.nodes.UnlockAbilityAction;
@@ -21,5 +22,6 @@ public class ModActions {
         REQUIREMENTS_REGISTER.register(bus);
         registerAction(RemovePointsAction::new, "remove_points");
         registerAction(UnlockAbilityAction::new, "unlock_ability");
+        registerAction(AwakenFruitAction::new, "awaken");
     }
 }
